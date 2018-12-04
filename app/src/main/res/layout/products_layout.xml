@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <include
+        android:id="@+id/toolbar_layout"
+        layout="@layout/toolbar_layout"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_xxmedium"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_layout"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <com.scraapp.utility.ScraAppTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:paddingLeft="@dimen/padding_medium"
+                android:text="@string/plastics" />
+
+            <com.scraapp.utility.ScraAppEdittext
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="10.5"
+                android:padding="3dp"
+                android:background="@drawable/edittext_background"
+                android:inputType="numberDecimal"/>
+
+            <com.scraapp.utility.ScraAppTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="/ kg"
+                android:paddingStart="@dimen/padding_medium" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginTop="@dimen/padding_xxmedium">
+
+            <com.scraapp.utility.ScraAppTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:paddingLeft="@dimen/padding_medium"
+                android:text="@string/iron" />
+
+            <com.scraapp.utility.ScraAppEdittext
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="10.5"
+                android:padding="3dp"
+                android:background="@drawable/edittext_background"
+                android:inputType="numberDecimal"/>
+
+            <com.scraapp.utility.ScraAppTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:paddingLeft="@dimen/padding_medium"
+                android:text="/ kg" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginTop="@dimen/padding_xxmedium">
+
+            <com.scraapp.utility.ScraAppTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:paddingLeft="@dimen/padding_medium"
+                android:text="@string/papers" />
+
+            <com.scraapp.utility.ScraAppEdittext
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="10.5"
+                android:padding="3dp"
+                android:background="@drawable/edittext_background"
+                android:inputType="numberDecimal"/>
+
+            <com.scraapp.utility.ScraAppTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:paddingLeft="@dimen/padding_medium"
+                android:text="/ kg" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginTop="@dimen/padding_xxmedium">
+
+            <com.scraapp.utility.ScraAppTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:paddingLeft="@dimen/padding_medium"
+                android:text="@string/others" />
+
+            <com.scraapp.utility.ScraAppEdittext
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="elect wastages"
+                android:padding="3dp"
+                android:background="@drawable/edittext_background"
+                android:inputType="text"/>
+
+            <com.scraapp.utility.ScraAppTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:paddingLeft="@dimen/padding_medium"
+                android:text="/ kg"
+                android:visibility="invisible"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <com.scraapp.utility.ScraAppButton
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/white"
+        android:textSize="@dimen/button_text_small"
+        android:text="@string/confirm"/>
+
+</android.support.constraint.ConstraintLayout>

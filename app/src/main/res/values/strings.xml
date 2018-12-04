@@ -1,3 +1,40 @@
 <resources>
     <string name="app_name">ScraApp</string>
+    
+    <!--activity_home.xml-->
+    <string name="confirm_pickup">CONFIRM PICKUP</string>
+    <string name="pickup_address">Pick up Address</string>
+    <string name="set_your_location">Set your Location</string>
+    <string name="no_location_data_provided">No location data provided</string>
+    <string name="no_address_found">Sorry, no address found</string>
+    <string name="service_not_available">Sorry, the service is not available</string>
+    <string name="invalid_lat_long_used">Invalid latitude or longitude used</string>
+
+
+    <string name="api_key">AIzaSyCFpYOkbt8Oi92RZ0OLwYqKE5IxE0otbPI</string>
+
+    <string name="accept">ACCEPT</string>
+    <string name="not_now">NOT NOW</string>
+
+    <string name="plastics">Plastics</string>
+    <string name="iron">Iron</string>
+    <string name="papers">Papers</string>
+    <string name="others">Others</string>
+    <string name="confirm">Confirm</string>
+
+    <string name="user_name_mob_no">User name / Mobile no.</string>
+    <string name="user_name">User name</string>
+    <string name="mobile_no">Mobile No.</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="not_signed_in">Not Signed user?</string>
+    <string name="forget_password">Forget password</string>
+
+    <string name="fill_mandatory_field">Fill mandatory field(s)</string>
+    <string name="error_no_internet">Check your network connection</string>
+    <string name="error_server_problem">Server problem. Try later.</string>
+    <string name="loading">Loading ...</string>
+
 </resources>

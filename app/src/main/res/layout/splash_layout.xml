@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+    <com.scraapp.utility.ScraAppTextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/padding_xxxlarge"
+        android:gravity="center_horizontal"
+        android:text="@string/app_name"
+        android:textColor="@color/white"
+        android:textSize="@dimen/title_text" />
+
+    <LinearLayout
+        android:id="@+id/signin_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/padding_xxmedium"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_medium"
+        android:visibility="visible">
+
+        <com.scraapp.utility.ScraAppEdittext
+            android:id="@+id/user_name"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="@drawable/et_login_bg"
+            android:hint="@string/user_name_mob_no"
+            android:padding="@dimen/padding_medium"
+            android:text="rajeshram0205@gmail.com"
+            android:singleLine="true"/>
+
+        <com.scraapp.utility.ScraAppEdittext
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="@drawable/et_login_bg"
+            android:hint="@string/password"
+            android:text="rajesh"
+            android:inputType="textPassword"
+            android:layout_marginTop="@dimen/padding_xsmall"
+            android:padding="@dimen/padding_medium"
+            android:singleLine="true"
+            android:imeOptions="actionDone"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+        <com.scraapp.utility.ScraAppTextView
+            android:id="@+id/not_signed_user_cta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/not_signed_in"
+            android:layout_marginTop="@dimen/padding_small"
+            android:textColor="@color/white"
+            android:textSize="@dimen/button_text_xxsmall" />
+
+        <com.scraapp.utility.ScraAppTextView
+            android:id="@+id/forget_password"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="@string/forget_password"
+            android:layout_marginTop="@dimen/padding_small"
+            android:textColor="@color/white"
+            android:textSize="@dimen/button_text_xxsmall" />
+
+        </LinearLayout>
+
+        <com.scraapp.utility.ScraAppButton
+            android:id="@+id/login_cta"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_marginTop="@dimen/padding_xmedium"
+            android:background="@drawable/et_login_bg"
+            android:padding="@dimen/padding_medium"
+            android:text="@string/sign_in" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/signup_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/padding_xxmedium"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_medium"
+        android:visibility="invisible">
+
+        <com.scraapp.utility.ScraAppEdittext
+            android:id="@+id/user_name_signup"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="@drawable/et_login_bg"
+            android:hint="@string/user_name"
+            android:padding="@dimen/padding_medium"
+            android:singleLine="true"/>
+
+        <com.scraapp.utility.ScraAppEdittext
+            android:id="@+id/mobile_signup"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="@drawable/et_login_bg"
+            android:layout_marginTop="@dimen/padding_small"
+            android:hint="@string/mobile_no"
+            android:padding="@dimen/padding_medium"
+            android:singleLine="true"/>
+
+        <com.scraapp.utility.ScraAppEdittext
+            android:id="@+id/password_signup"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="@drawable/et_login_bg"
+            android:layout_marginTop="@dimen/padding_small"
+            android:hint="@string/password"
+            android:padding="@dimen/padding_medium"
+            android:singleLine="true"/>
+
+        <com.scraapp.utility.ScraAppEdittext
+            android:id="@+id/confirm_password_signup"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="@drawable/et_login_bg"
+            android:layout_marginTop="@dimen/padding_small"
+            android:hint="@string/confirm_password"
+            android:padding="@dimen/padding_medium"
+            android:singleLine="true"/>
+
+        <com.scraapp.utility.ScraAppButton
+            android:id="@+id/signup_cta"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_marginTop="@dimen/padding_xmedium"
+            android:background="@drawable/et_login_bg"
+            android:padding="@dimen/padding_medium"
+            android:text="@string/sign_up" />
+
+    </LinearLayout>
+
+</RelativeLayout>
