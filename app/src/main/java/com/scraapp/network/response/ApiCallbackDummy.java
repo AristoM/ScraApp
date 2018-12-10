@@ -1,10 +1,7 @@
 package com.scraapp.network.response;
 
-
 import android.text.TextUtils;
 
-import com.scraapp.network.ApiClient;
-import com.scraapp.network.ApiService;
 import com.scraapp.network.event.ApiErrorEvent;
 import com.scraapp.network.event.ApiErrorWithMessageEvent;
 import com.scraapp.network.event.RequestFinishedEvent;
@@ -15,12 +12,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Use this class to have a callback which can be used for the api calls in {@link ApiService}.
- * Such a callback can be invalidated to not notify its caller about the api response.
- * Furthermore it handles finishing the request after the caller has handled the response.
- */
-public class ApiCallback<T extends AbstractApiResponse> implements Callback<T> {
+public class ApiCallbackDummy<T extends SignInResponse> implements Callback<T> {
 
     /**
      * Indicates if the callback was invalidated.
@@ -33,12 +25,12 @@ public class ApiCallback<T extends AbstractApiResponse> implements Callback<T> {
     private final String requestTag;
 
     /**
-     * Creates an {@link ApiCallback} with the passed request tag. The tag is used to finish
+     * Creates an {@link ApiCallbackDummy} with the passed request tag. The tag is used to finish
      * the request after the response has been handled. See {@link #finishRequest}.
      *
      * @param requestTag The tag of the request which uses this callback.
      */
-    public ApiCallback(String requestTag) {
+    public ApiCallbackDummy(String requestTag) {
         isInvalidated = false;
         this.requestTag = requestTag;
     }
@@ -51,9 +43,9 @@ public class ApiCallback<T extends AbstractApiResponse> implements Callback<T> {
         }
         T result = response.body();
         if (response.isSuccessful() && result != null) {
-            if (0 == result.getStatus()) {
+            if (!result.getResult().getStatus().equalsIgnoreCase("Success")) {
                 // Error occurred. Check for error message from api.
-                String resultMsgUser = result.getMessage();
+                String resultMsgUser = result.getResult().getMessage();
 
                 if (!TextUtils.isEmpty(resultMsgUser)) {
                     EventBus.getDefault()
@@ -112,7 +104,7 @@ public class ApiCallback<T extends AbstractApiResponse> implements Callback<T> {
     }
 
     /**
-     * Posts a {@link RequestFinishedEvent} on the EventBus to tell the {@link ApiClient}
+     * Posts a {@link RequestFinishedEvent} on the EventBus to tell the {@link com.scraapp.network.ApiClient}
      * to remove the request from the list of running requests.
      */
     private void finishRequest() {

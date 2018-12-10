@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.scraapp.network.event.RequestFinishedEvent;
 import com.scraapp.network.request.AbstractApiRequest;
+import com.scraapp.network.request.LoginRequestParam;
 import com.scraapp.network.request.SignInApiRequest;
 
 import org.greenrobot.eventbus.EventBus;
@@ -131,7 +132,9 @@ public class ApiClient {
 //    }
 
     public void signInRequest(String requestTag, String username, String password) {
-        SignInApiRequest request = new SignInApiRequest(mApiService, requestTag, username, password);
+        LoginRequestParam loginRequestParam = new LoginRequestParam("login", username, password, mApiService, requestTag);
+
+        SignInApiRequest request = new SignInApiRequest(loginRequestParam);
         requests.put(requestTag, request);
         request.execute();
 

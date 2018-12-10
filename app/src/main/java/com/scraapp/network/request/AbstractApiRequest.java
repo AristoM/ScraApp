@@ -9,7 +9,7 @@ public abstract class AbstractApiRequest {
     /**
      * The endpoint for executing the calls.
      */
-    protected final ApiService apiService;
+    final ApiService apiService;
 
     /**
      * Identifies the request.
@@ -24,7 +24,7 @@ public abstract class AbstractApiRequest {
      * @param apiService The {@link ApiService} used for executing the calls.
      * @param tag        Identifies the request.
      */
-    protected AbstractApiRequest(ApiService apiService, String tag) {
+    AbstractApiRequest(ApiService apiService, String tag) {
         this.apiService = apiService;
         this.tag = tag;
         context = RetroFitApp.getApp();

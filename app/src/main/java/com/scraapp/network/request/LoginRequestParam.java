@@ -1,12 +1,15 @@
 package com.scraapp.network.request;
 
-public class LoginRequestParam {
+import com.scraapp.network.ApiService;
+
+public class LoginRequestParam extends RequestParam {
 
     private String action;
     private String email;
     private String password;
 
-    public LoginRequestParam(String action, String email, String password) {
+    public LoginRequestParam(String action, String email, String password, ApiService apiService, String requestTag) {
+        super(apiService, requestTag);
         this.action = action;
         this.email = email;
         this.password = password;

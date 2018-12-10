@@ -1,28 +1,16 @@
 package com.scraapp.network.request;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.scraapp.R;
 import com.scraapp.network.ApiService;
-import com.scraapp.network.response.AbstractApiResponse;
 import com.scraapp.network.response.ApiCallback;
+import com.scraapp.network.response.ApiCallbackDummy;
 import com.scraapp.network.response.SignInResponse;
 
-import org.json.JSONObject;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 
 public class SignInApiRequest extends AbstractApiRequest {
 
-    String mUserName, mPassword;
+    private LoginRequestParam loginRequestParam;
 
     /**
      * + The callback used for this request. Declared globally for cancellation. See {@link
@@ -37,32 +25,22 @@ public class SignInApiRequest extends AbstractApiRequest {
     /**
      * Initialize the request with the passed values.
      *
-     * @param apiService The {@link ApiService} used for executing the calls.
-     * @param tag        Identifies the request.
+     * @param loginRequestParam The {@link ApiService} used for executing the calls.
      */
-    public SignInApiRequest(ApiService apiService, String tag, String mUserName, String mPassword) {
-        super(apiService, tag);
-        this.mUserName = mUserName;
-        this.mPassword = mPassword;
+    public SignInApiRequest(LoginRequestParam loginRequestParam) {
+        super(loginRequestParam.getmApiService(), loginRequestParam.getmRequestTag());
+        this.loginRequestParam = loginRequestParam;
     }
 
     @Override
     public void execute() {
-        callback = new ApiCallback<>(tag);
+        callback = new ApiCallbackDummy<>(tag);
         if (!isInternetActive()) {
             callback.postUnexpectedError(context.getString(R.string.error_no_internet));
             return;
         }
 
-//        Gson gson = new Gson();
-//        Map<String, String> params = new HashMap<>();
-//        params.put("email", mUserName);
-//        params.put("password", mPassword);
-//        params.put("action", "test");
-
-//        call = apiService.signInCall(gson.toJsonTree(params).getAsJsonObject());
-        call = apiService.signInCall(new LoginRequestParam("login", mUserName, mPassword));
-//        call = apiService.signInCall(params);
+        call = apiService.signInCall(loginRequestParam);
         call.enqueue(callback);
 
     }
