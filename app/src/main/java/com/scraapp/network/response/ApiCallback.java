@@ -51,7 +51,7 @@ public class ApiCallback<T extends AbstractApiResponse> implements Callback<T> {
         }
         T result = response.body();
         if (response.isSuccessful() && result != null) {
-            if (0 == result.getStatus()) {
+            if (!result.getStatus().equalsIgnoreCase("success")) {
                 // Error occurred. Check for error message from api.
                 String resultMsgUser = result.getMessage();
 

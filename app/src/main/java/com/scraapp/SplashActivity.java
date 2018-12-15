@@ -1,5 +1,6 @@
 package com.scraapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -190,6 +191,11 @@ public class SplashActivity extends ScrApp {
                     CommonUtils.saveSharedPref(this, Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME, sUname);
                     CommonUtils.saveSharedPref(this, Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME, sPwd);
                 }
+
+                Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                startActivity(intent);
+                finish();
 
                 break;
             case Constant.SIGNUP_REQUEST_TAG:

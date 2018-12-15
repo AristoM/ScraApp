@@ -30,15 +30,12 @@ public class ApiClient {
 
     private static int HTTP_TIMEOUT = 30; // Seconds by default
 
-    private static final String WS_SCHEME = "https://";
+    private static final String WS_SCHEME = "https://scra.app/api";
     private static final String WS_PREFIX_DOMAIN = "scra.app";
     private static final String WS_HOSTNAME = "/";
     private static final String WS_SUFFIX_FOLDER = "api/";
 
-    private static String API_BASE_URL = WS_SCHEME
-            + WS_PREFIX_DOMAIN
-            + WS_HOSTNAME
-            + WS_SUFFIX_FOLDER;
+    private static String API_BASE_URL = "https://scra.app/api/";
 
     /**
      * Makes the ApiService calls.
@@ -78,6 +75,13 @@ public class ApiClient {
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
+
+//        Gson gson = new GsonBuilder()
+//                .serializeNulls()
+//                .disableHtmlEscaping()
+//                .setPrettyPrinting()
+//                .create();
+
 
         retrofit = builder
                 .addConverterFactory(GsonConverterFactory.create(gson))

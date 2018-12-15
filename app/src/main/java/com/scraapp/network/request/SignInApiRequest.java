@@ -15,7 +15,7 @@ public class SignInApiRequest extends AbstractApiRequest {
      * + The callback used for this request. Declared globally for cancellation. See {@link
      * #cancel()}.
      */
-    ApiCallback<SignInResponse> callback;
+    private ApiCallback<SignInResponse> callback;
     /**
      * To cancel REST API call from Retrofit. See {@link #cancel()}.
      */

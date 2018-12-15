@@ -22,7 +22,7 @@ class MyOkHttpBuilder {
 
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        builder.addInterceptor(loggingInterceptor).addInterceptor(new MockInterceptor(context));
+        builder.addInterceptor(loggingInterceptor).addInterceptor(new MockInterceptor());
 
         return builder;
     }
