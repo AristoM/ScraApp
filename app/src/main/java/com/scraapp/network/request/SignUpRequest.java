@@ -2,33 +2,41 @@ package com.scraapp.network.request;
 
 import com.scraapp.R;
 import com.scraapp.network.ApiService;
+import com.scraapp.network.response.AbstractApiResponse;
 import com.scraapp.network.response.ApiCallback;
 import com.scraapp.network.response.SignInResponse;
 
 import retrofit2.Call;
 
-public class SignInApiRequest extends AbstractApiRequest {
+public class SignUpRequest extends AbstractApiRequest {
 
-    private LoginRequestParam loginRequestParam;
+    private SignupRequestParam signupRequestParam;
 
     /**
      * + The callback used for this request. Declared globally for cancellation. See {@link
      * #cancel()}.
      */
-    ApiCallback<SignInResponse> callback;
+    private ApiCallback<AbstractApiResponse> callback;
     /**
      * To cancel REST API call from Retrofit. See {@link #cancel()}.
      */
-    private Call<SignInResponse> call;
+    private Call<AbstractApiResponse> call;
 
     /**
      * Initialize the request with the passed values.
      *
-     * @param loginRequestParam The {@link ApiService} used for executing the calls.
+     * @param apiService The {@link ApiService} used for executing the calls.
+     * @param signupRequestParam        Identifies the request.
      */
-    public SignInApiRequest(ApiService apiService, LoginRequestParam loginRequestParam) {
-        super(apiService, loginRequestParam.getmRequestTag());
-        this.loginRequestParam = loginRequestParam;
+    public SignUpRequest(ApiService apiService, SignupRequestParam signupRequestParam) {
+        super(apiService, signupRequestParam.getmRequestTag());
+        this.signupRequestParam = signupRequestParam;
+    }
+
+    @Override
+    public void cancel() {
+        callback.invalidate();
+        call.cancel();
     }
 
     @Override
@@ -39,14 +47,7 @@ public class SignInApiRequest extends AbstractApiRequest {
             return;
         }
 
-        call = apiService.signInCall(loginRequestParam);
+        call = apiService.signUpCall(signupRequestParam);
         call.enqueue(callback);
-
-    }
-
-    @Override
-    public void cancel() {
-        callback.invalidate();
-        call.cancel();
     }
 }

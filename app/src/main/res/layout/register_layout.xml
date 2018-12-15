@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/signup_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_medium"
+        android:visibility="gone">
+
+        <com.scraapp.utility.ScraAppEdittext
+            android:id="@+id/user_name_signup"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="@drawable/et_login_bg"
+            android:hint="@string/user_name"
+            android:padding="@dimen/padding_medium"
+            android:singleLine="true"
+            android:text="aristo"/>
+
+        <com.scraapp.utility.ScraAppEdittext
+            android:id="@+id/email_signup"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="@drawable/et_login_bg"
+            android:layout_marginTop="@dimen/padding_small"
+            android:hint="@string/email"
+            android:padding="@dimen/padding_medium"
+            android:text="google@gmail.com"
+            android:inputType="textEmailAddress"
+            android:singleLine="true"/>
+
+        <com.scraapp.utility.ScraAppEdittext
+            android:id="@+id/mobile_signup"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="@drawable/et_login_bg"
+            android:layout_marginTop="@dimen/padding_small"
+            android:hint="@string/mobile_no"
+            android:padding="@dimen/padding_medium"
+            android:text="1234567890"
+            android:maxLength="10"
+            android:inputType="phone"
+            android:singleLine="true"/>
+
+        <com.scraapp.utility.ScraAppEdittext
+            android:id="@+id/password_signup"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="@drawable/et_login_bg"
+            android:layout_marginTop="@dimen/padding_small"
+            android:hint="@string/password"
+            android:padding="@dimen/padding_medium"
+            android:text="aristo"
+            android:inputType="textPassword"
+            android:singleLine="true"/>
+
+        <com.scraapp.utility.ScraAppEdittext
+            android:id="@+id/confirm_password_signup"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="@drawable/et_login_bg"
+            android:layout_marginTop="@dimen/padding_small"
+            android:hint="@string/confirm_password"
+            android:padding="@dimen/padding_medium"
+            android:inputType="textPassword"
+            android:text="aristo"
+            android:singleLine="true"/>
+
+        <com.scraapp.utility.ScraAppButton
+            android:id="@+id/signup_cta"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_marginTop="@dimen/padding_xmedium"
+            android:background="@drawable/et_login_bg"
+            android:padding="@dimen/padding_medium"
+            android:text="@string/sign_up" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -9,6 +9,8 @@ import com.scraapp.network.event.RequestFinishedEvent;
 import com.scraapp.network.request.AbstractApiRequest;
 import com.scraapp.network.request.LoginRequestParam;
 import com.scraapp.network.request.SignInApiRequest;
+import com.scraapp.network.request.SignUpRequest;
+import com.scraapp.network.request.SignupRequestParam;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -113,33 +115,18 @@ public class ApiClient {
     // ============================================================================================
 
 
-    /**
-     * Execute a request to retrieve the update message. See {@link ApiService#(String)} for
-     * parameter details.
-     *
-     * @param requestTag The tag for identifying the request.
-     */
-//    public void getImageList(String requestTag) {
-//        ImageListRequest request = new ImageListRequest(mApiService, requestTag);
-//        requests.put(requestTag, request);
-//        request.execute();
-//    }
 
-//    public void uploadImage(String requestTag, String file) {
-//        UploadImageRequest request = new UploadImageRequest(mApiService, requestTag, file);
-//        requests.put(requestTag, request);
-//        request.execute();
-//    }
-
-    public void signInRequest(String requestTag, String username, String password) {
-        LoginRequestParam loginRequestParam = new LoginRequestParam("login", username, password, mApiService, requestTag);
-
-        SignInApiRequest request = new SignInApiRequest(loginRequestParam);
-        requests.put(requestTag, request);
+    public void signInRequest(LoginRequestParam loginRequestParam) {
+        SignInApiRequest request = new SignInApiRequest(mApiService, loginRequestParam);
+        requests.put(loginRequestParam.getmRequestTag(), request);
         request.execute();
-
     }
 
+    public void signUpRequest(SignupRequestParam signupRequestParam) {
+        SignUpRequest request = new SignUpRequest(mApiService, signupRequestParam);
+        requests.put(signupRequestParam.getmRequestTag(), request);
+        request.execute();
+    }
 
     // ============================================================================================
     // Public functions

@@ -9,32 +9,12 @@ public class SignInResponse extends AbstractApiResponse {
 
     @SerializedName("result")
     @Expose
-    public Result result;
+    private Result result;
 
     public class Result {
 
-        public String message;
-
-        public String status;
-
         @SerializedName("user")
         private User user;
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
-
-        public String getStatus() {
-            return status;
-        }
-
-        public void setStatus(String status) {
-            this.status = status;
-        }
 
         public User getUser() {
             return user;
@@ -45,7 +25,7 @@ public class SignInResponse extends AbstractApiResponse {
         }
     }
 
-    private class User {
+    public class User {
 
         @SerializedName("id")
         String id;
@@ -89,4 +69,11 @@ public class SignInResponse extends AbstractApiResponse {
         }
     }
 
+    public Result getResult() {
+        return result;
+    }
+
+    public void setResult(Result result) {
+        this.result = result;
+    }
 }

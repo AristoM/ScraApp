@@ -3,6 +3,7 @@ package com.scraapp.network;
 import com.google.android.gms.maps.MapView;
 import com.google.gson.JsonObject;
 import com.scraapp.network.request.LoginRequestParam;
+import com.scraapp.network.request.SignupRequestParam;
 import com.scraapp.network.response.AbstractApiResponse;
 import com.scraapp.network.response.SignInResponse;
 
@@ -36,8 +37,10 @@ public interface ApiService {
 
 
     @POST("users/")
-    Call<SignInResponse> signInCall(
-            @Body LoginRequestParam body);
+    Call<SignInResponse> signInCall(@Body LoginRequestParam body);
+
+    @POST("users/")
+    Call<AbstractApiResponse> signUpCall(@Body SignupRequestParam body);
 
 
 }

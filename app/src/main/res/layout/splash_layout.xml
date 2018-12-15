@@ -21,7 +21,7 @@
         android:layout_marginBottom="@dimen/padding_xxmedium"
         android:orientation="vertical"
         android:padding="@dimen/padding_medium"
-        android:visibility="visible">
+        android:visibility="invisible">
 
         <com.scraapp.utility.ScraAppEdittext
             android:id="@+id/user_name"
@@ -86,64 +86,13 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/signup_layout"
-        android:layout_width="match_parent"
+    <include android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/padding_xxmedium"
-        android:orientation="vertical"
-        android:padding="@dimen/padding_medium"
-        android:visibility="invisible">
+        android:visibility="visible"
+        layout="@layout/register_layout"/>
 
-        <com.scraapp.utility.ScraAppEdittext
-            android:id="@+id/user_name_signup"
-            android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:background="@drawable/et_login_bg"
-            android:hint="@string/user_name"
-            android:padding="@dimen/padding_medium"
-            android:singleLine="true"/>
 
-        <com.scraapp.utility.ScraAppEdittext
-            android:id="@+id/mobile_signup"
-            android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:background="@drawable/et_login_bg"
-            android:layout_marginTop="@dimen/padding_small"
-            android:hint="@string/mobile_no"
-            android:padding="@dimen/padding_medium"
-            android:singleLine="true"/>
-
-        <com.scraapp.utility.ScraAppEdittext
-            android:id="@+id/password_signup"
-            android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:background="@drawable/et_login_bg"
-            android:layout_marginTop="@dimen/padding_small"
-            android:hint="@string/password"
-            android:padding="@dimen/padding_medium"
-            android:singleLine="true"/>
-
-        <com.scraapp.utility.ScraAppEdittext
-            android:id="@+id/confirm_password_signup"
-            android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:background="@drawable/et_login_bg"
-            android:layout_marginTop="@dimen/padding_small"
-            android:hint="@string/confirm_password"
-            android:padding="@dimen/padding_medium"
-            android:singleLine="true"/>
-
-        <com.scraapp.utility.ScraAppButton
-            android:id="@+id/signup_cta"
-            android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:layout_marginTop="@dimen/padding_xmedium"
-            android:background="@drawable/et_login_bg"
-            android:padding="@dimen/padding_medium"
-            android:text="@string/sign_up" />
-
-    </LinearLayout>
 
 </RelativeLayout>

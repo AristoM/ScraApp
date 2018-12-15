@@ -1,6 +1,7 @@
 package com.scraapp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -49,8 +50,25 @@ class CommonUtils {
         return !TextUtils.isEmpty(textView.getText().toString());
     }
 
+    static boolean textCompare(TextView textView1, TextView textView2) {
+        return textView1.getText().toString().equalsIgnoreCase(textView2.getText().toString());
+    }
+
     static void displayToast(Context context, String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    static void saveSharedPref(Context context, String prefFileName, String key, String value) {
+        SharedPreferences sp = context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(key, value);
+        editor.apply();
+
+    }
+
+    static String getSharedPref(Context context, String prefFileName, String key) {
+        SharedPreferences sp = context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE);
+        return sp.getString(key, null);
     }
 
 }

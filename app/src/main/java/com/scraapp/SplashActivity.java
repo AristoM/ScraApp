@@ -2,23 +2,22 @@ package com.scraapp;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.fido.fido2.api.common.RequestOptions;
 import com.scraapp.network.event.ApiErrorEvent;
 import com.scraapp.network.event.ApiErrorWithMessageEvent;
+import com.scraapp.network.request.LoginRequestParam;
+import com.scraapp.network.request.SignupRequestParam;
 import com.scraapp.network.response.AbstractApiResponse;
+import com.scraapp.network.response.SignInResponse;
+import com.scraapp.utility.ActionRequest;
 import com.scraapp.utility.Constant;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 public class SplashActivity extends ScrApp {
@@ -26,7 +25,8 @@ public class SplashActivity extends ScrApp {
     Button loginCta, signupCta;
     TextView registerCta;
     LinearLayout signInLayout, signUpLayout;
-    TextView mUserName, mPassword;
+    EditText mUserName, mPassword, mUserNameSignup, mPasswordSignup, mConfirmPassword, mMobileSignup, mEmailSignup;
+    String sUname, sPwd;
 
     public int getlayout() {
         return R.layout.splash_layout;
@@ -43,39 +43,48 @@ public class SplashActivity extends ScrApp {
         signUpLayout = findViewById(R.id.signup_layout);
         mUserName = findViewById(R.id.user_name);
         mPassword = findViewById(R.id.password);
+        mUserNameSignup = findViewById(R.id.user_name_signup);
+        mPasswordSignup = findViewById(R.id.password_signup);
+        mConfirmPassword = findViewById(R.id.confirm_password_signup);
+        mMobileSignup = findViewById(R.id.mobile_signup);
+        mEmailSignup = findViewById(R.id.email_signup);
 
-        loginCta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
-//                startActivity(intent);
-//                finish();
+        if(!TextUtils.isEmpty(CommonUtils.getSharedPref(this, Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME))) {
+            loginProcess();
+        } else {
+            signInLayout.setVisibility(View.VISIBLE);
+            signUpLayout.setVisibility(View.INVISIBLE);
+        }
 
-                if(validation()) {
-                    if (!mApiClient.isRequestRunning(Constant.SIGNIN_REQUEST_TAG)) {
-                        showProgress();
-                        mApiClient.signInRequest(Constant.SIGNIN_REQUEST_TAG, mUserName.getText().toString(), mPassword.getText().toString());
-                    }
-                } else {
-                    CommonUtils.displayToast(getContext(), getString(R.string.fill_mandatory_field));
-                }
+        loginCta.setOnClickListener(view -> {
+
+            if(validation(ActionRequest.LOGIN)) {
+                sUname = mUserName.getText().toString();
+                sPwd = mPassword.getText().toString();
+                loginProcess();
+            } else {
+                CommonUtils.displayToast(getContext(), getString(R.string.fill_mandatory_field));
             }
         });
 
-        registerCta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        registerCta.setOnClickListener(view -> {
                 signInLayout.setVisibility(View.INVISIBLE);
                 signUpLayout.setVisibility(View.VISIBLE);
 
-            }
         });
 
-        signupCta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signInLayout.setVisibility(View.VISIBLE);
-                signUpLayout.setVisibility(View.INVISIBLE);
+        signupCta.setOnClickListener(view -> {
+
+            if(validation(ActionRequest.REGISTER)) {
+                if (!mApiClient.isRequestRunning(Constant.SIGNIN_REQUEST_TAG)) {
+                    showProgress();
+                    SignupRequestParam signupRequestParam = new SignupRequestParam(ActionRequest.REGISTER, mUserNameSignup.getText().toString(),
+                            mEmailSignup.getText().toString(), mPasswordSignup.getText().toString(),
+                            mMobileSignup.getText().toString(), null, Constant.SIGNUP_REQUEST_TAG);
+                    mApiClient.signUpRequest(signupRequestParam);
+                }
+            }else {
+                CommonUtils.displayToast(getContext(), getString(R.string.fill_mandatory_field));
             }
         });
 
@@ -96,26 +105,50 @@ public class SplashActivity extends ScrApp {
 
     }
 
+    private boolean validation(String action) {
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//
-//        contentView = null;
-//    }
+        if(action.equalsIgnoreCase(ActionRequest.LOGIN)) {
+            if (CommonUtils.textValidation(mUserName) && CommonUtils.textValidation(mPassword)) {
+                return true;
+            }
 
-    private boolean validation() {
+            if (!CommonUtils.textValidation(mUserName)) {
+                mUserName.setError(null);
+            }
 
-        if(CommonUtils.textValidation(mUserName) && CommonUtils.textValidation(mPassword)) {
-            return true;
-        }
+            if (!CommonUtils.textValidation(mPassword)) {
+                mPassword.setError(null);
+            }
+        } else if(action.equalsIgnoreCase(ActionRequest.REGISTER)) {
+            if(CommonUtils.textValidation(mUserNameSignup) && CommonUtils.textValidation(mPasswordSignup) && CommonUtils.textValidation(mConfirmPassword)
+                    && CommonUtils.textValidation(mMobileSignup) && CommonUtils.textValidation(mEmailSignup)) {
+                if(CommonUtils.textCompare(mPasswordSignup, mConfirmPassword)) {
+                    return true;
+                } else {
+                    CommonUtils.displayToast(this, getString(R.string.password_mismatch));
+                }
+            }
 
-        if(!CommonUtils.textValidation(mUserName)) {
-            mUserName.setError("");
-        }
+            if(!CommonUtils.textValidation(mUserNameSignup)) {
+                mUserNameSignup.setError(null);
+            }
 
-        if(!CommonUtils.textValidation(mPassword)) {
-            mPassword.setError("");
+            if(!CommonUtils.textValidation(mPasswordSignup)) {
+                mPasswordSignup.setError(null);
+            }
+
+            if(!CommonUtils.textValidation(mConfirmPassword)) {
+                mConfirmPassword.setError(null);
+            }
+
+            if(!CommonUtils.textValidation(mMobileSignup)) {
+                mMobileSignup.setError(null);
+            }
+
+            if(!CommonUtils.textValidation(mEmailSignup)) {
+                mEmailSignup.setError(null);
+            }
+
         }
 
         return false;
@@ -149,6 +182,23 @@ public class SplashActivity extends ScrApp {
                 dismissProgress();
                 CommonUtils.displayToast(getContext(), apiResponse.getMessage());
 
+                if(!TextUtils.isEmpty(CommonUtils.getSharedPref(this, Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME))) {
+                    sUname = CommonUtils.getSharedPref(this, Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME);
+                    sPwd = CommonUtils.getSharedPref(this, Constant.SP_FILE_LOGIN, Constant.SP_PASSWORD);
+                } else {
+                    SignInResponse signInResponse = (SignInResponse) apiResponse;
+                    CommonUtils.saveSharedPref(this, Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME, sUname);
+                    CommonUtils.saveSharedPref(this, Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME, sPwd);
+                }
+
+                break;
+            case Constant.SIGNUP_REQUEST_TAG:
+                dismissProgress();
+
+                CommonUtils.displayToast(getContext(), apiResponse.getMessage());
+                signInLayout.setVisibility(View.VISIBLE);
+                signUpLayout.setVisibility(View.INVISIBLE);
+
                 break;
 
             default:
@@ -170,6 +220,14 @@ public class SplashActivity extends ScrApp {
                 Log.e("okhttp", event.getRetrofitError().toString());
                 break;
 
+            case Constant.SIGNUP_REQUEST_TAG:
+                dismissProgress();
+
+                CommonUtils.displayToast(getContext(), event.getRetrofitError().toString());
+                Log.e("okhttp", event.getRetrofitError().toString());
+
+                break;
+
             default:
                 break;
         }
@@ -188,8 +246,22 @@ public class SplashActivity extends ScrApp {
                 CommonUtils.displayToast(getContext(), event.getResultMsgUser());
                 break;
 
+            case Constant.SIGNUP_REQUEST_TAG:
+                dismissProgress();
+                CommonUtils.displayToast(getContext(), event.getResultMsgUser());
+                break;
+
             default:
                 break;
+        }
+    }
+
+    void loginProcess() {
+        if (!mApiClient.isRequestRunning(Constant.SIGNIN_REQUEST_TAG)) {
+            showProgress();
+            LoginRequestParam loginRequestParam = new LoginRequestParam(ActionRequest.LOGIN, mUserName.getText().toString(), mPassword.getText().toString()
+                    , null, Constant.SIGNIN_REQUEST_TAG);
+            mApiClient.signInRequest(loginRequestParam);
         }
     }
 

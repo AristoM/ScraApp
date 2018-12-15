@@ -12,7 +12,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ApiCallbackDummy<T extends SignInResponse> implements Callback<T> {
+public class ApiCallbackDummy<T extends AbstractApiResponse> implements Callback<T> {
 
     /**
      * Indicates if the callback was invalidated.
@@ -43,9 +43,9 @@ public class ApiCallbackDummy<T extends SignInResponse> implements Callback<T> {
         }
         T result = response.body();
         if (response.isSuccessful() && result != null) {
-            if (!result.getResult().getStatus().equalsIgnoreCase("Success")) {
+            if (!result.getStatus().equalsIgnoreCase("Success")) {
                 // Error occurred. Check for error message from api.
-                String resultMsgUser = result.getResult().getMessage();
+                String resultMsgUser = result.getMessage();
 
                 if (!TextUtils.isEmpty(resultMsgUser)) {
                     EventBus.getDefault()

@@ -12,7 +12,7 @@ public class RequestParam {
         mRequestTag = requestTag;
     }
 
-    ApiService getmApiService() {
+    public ApiService getmApiService() {
         return mApiService;
     }
 
@@ -20,7 +20,7 @@ public class RequestParam {
         this.mApiService = mApiService;
     }
 
-    String getmRequestTag() {
+    public String getmRequestTag() {
         return mRequestTag;
     }
 
