@@ -1,5 +1,6 @@
 package com.scraapp.network;
 
+import com.scraapp.network.request.GetCategoriesRequestParam;
 import com.scraapp.network.request.LoginRequestParam;
 import com.scraapp.network.request.SignupRequestParam;
 import com.scraapp.network.response.AbstractApiResponse;
@@ -32,6 +33,9 @@ public interface ApiService {
 
     @POST("users/")
     Call<AbstractApiResponse> signUpCall(@Body SignupRequestParam body);
+
+    @POST("categories/")
+    Call<AbstractApiResponse> getAllCategories(@Body GetCategoriesRequestParam body);
 
 
 }

@@ -53,10 +53,19 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.scraapp.network.event.ApiErrorEvent;
+import com.scraapp.network.event.ApiErrorWithMessageEvent;
+import com.scraapp.network.request.GetCategoriesRequestParam;
+import com.scraapp.network.request.RetroFitApp;
+import com.scraapp.network.response.AbstractApiResponse;
+import com.scraapp.utility.ActionRequest;
+import com.scraapp.utility.Constant;
 import com.scraapp.utility.CustomTypefaceSpan;
 import com.scraapp.utility.ScraAppTextView;
 
-public abstract class BaseApp extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+import org.greenrobot.eventbus.Subscribe;
+
+public abstract class BaseApp extends ScrApp implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         com.google.android.gms.location.LocationListener, NavigationView.OnNavigationItemSelectedListener{
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -66,7 +75,6 @@ public abstract class BaseApp extends AppCompatActivity implements OnMapReadyCal
     private GoogleMap mMap;
     private LatLng mCenterLatLong;
     private static String TAG = "MAP LOCATION";
-    Context mContext;
 
     protected String mAddressOutput;
     protected String mAreaOutput;
@@ -86,9 +94,7 @@ public abstract class BaseApp extends AppCompatActivity implements OnMapReadyCal
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_home);
-
-        mContext = this;
+        mApiClient = getApp().getApiClient();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapView);
@@ -96,12 +102,7 @@ public abstract class BaseApp extends AppCompatActivity implements OnMapReadyCal
         mLocationAddress = findViewById(R.id.pickup_location);
         mConfirmPickup = findViewById(R.id.confirm_pickup);
 
-        mLocationAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openAutocompleteActivity();
-            }
-        });
+        mLocationAddress.setOnClickListener(view -> openAutocompleteActivity());
 
         mapFragment.getMapAsync(this);
         mResultReceiver = new AddressResultReceiver(new Handler());
@@ -131,7 +132,7 @@ public abstract class BaseApp extends AppCompatActivity implements OnMapReadyCal
 //            }
             buildGoogleApiClient();
         } else {
-            Toast.makeText(mContext, "Location not supported in this device", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Location not supported in this device", Toast.LENGTH_SHORT).show();
         }
 
         navView = findViewById(R.id.nav_view);
@@ -159,6 +160,19 @@ public abstract class BaseApp extends AppCompatActivity implements OnMapReadyCal
         toggle.syncState();
 
         navView.setNavigationItemSelectedListener(this);
+
+        initApi();
+        initDialog(getContext());
+    }
+
+    private void initApi() {
+        GetCategoriesRequestParam getCategoriesRequestParam = new GetCategoriesRequestParam(null,
+                Constant.GET_CATEGORIES_REQUEST_TAG, ActionRequest.GET_CATEGORIES);
+        mApiClient.getAllCategoriesRequest(getCategoriesRequestParam);
+    }
+
+    public RetroFitApp getApp() {
+        return (RetroFitApp) getApplication();
     }
 
 
@@ -364,9 +378,9 @@ public abstract class BaseApp extends AppCompatActivity implements OnMapReadyCal
 //            poke.setData(Uri.parse("3"));
 //            sendBroadcast(poke);
 
-            if (!CommonUtils.isLocationEnabled(mContext)) {
+            if (!CommonUtils.isLocationEnabled(getContext())) {
                 // notify user
-                AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
                 dialog.setMessage("Location not enabled!");
                 dialog.setPositiveButton("Open location settings", new DialogInterface.OnClickListener() {
                     @Override
@@ -607,7 +621,7 @@ public abstract class BaseApp extends AppCompatActivity implements OnMapReadyCal
             String message = "Google Play Services is not available: " +
                     GoogleApiAvailability.getInstance().getErrorString(e.errorCode);
 
-            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -619,7 +633,7 @@ public abstract class BaseApp extends AppCompatActivity implements OnMapReadyCal
         if (requestCode == REQUEST_CODE_AUTOCOMPLETE) {
             if (resultCode == RESULT_OK) {
                 // Get the user's selected place from the Intent.
-                Place place = PlaceAutocomplete.getPlace(mContext, data);
+                Place place = PlaceAutocomplete.getPlace(getContext(), data);
 
                 // TODO call location based filter
 
@@ -650,7 +664,7 @@ public abstract class BaseApp extends AppCompatActivity implements OnMapReadyCal
                         .newCameraPosition(cameraPosition));
             }
         } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-            Status status = PlaceAutocomplete.getStatus(mContext, data);
+            Status status = PlaceAutocomplete.getStatus(getContext(), data);
         } else if (resultCode == RESULT_CANCELED) {
             // Indicates that the activity closed before a selection was made. For example if
             // the user pressed the back button.
@@ -669,13 +683,61 @@ public abstract class BaseApp extends AppCompatActivity implements OnMapReadyCal
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
 
-        new Handler().postDelayed(new Runnable() {
+        new Handler().postDelayed(() -> doubleBackToExitPressedOnce=false, 2000);
+    }
 
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce=false;
-            }
-        }, 2000);
+    /**
+     * Response of Uploaded File
+     *
+     * @param apiResponse UploadFileResponse
+     */
+    @Subscribe
+    public void onEventMainThread(AbstractApiResponse apiResponse) {
+        switch (apiResponse.getRequestTag()) {
+            case Constant.GET_CATEGORIES_REQUEST_TAG:
+                dismissProgress();
+                CommonUtils.displayToast(getContext(), apiResponse.getMessage());
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * EventBus listener. An API call failed. No error message was returned.
+     *
+     * @param event ApiErrorEvent
+     */
+    @Subscribe
+    public void onEventMainThread(ApiErrorEvent event) {
+        switch (event.getRequestTag()) {
+            case Constant.GET_CATEGORIES_REQUEST_TAG:
+                dismissProgress();
+                CommonUtils.displayToast(getContext(), event.getRetrofitError().toString());
+                Log.e("okhttp", event.getRetrofitError().toString());
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * EventBus listener. An API call failed. An error message was returned.
+     *
+     * @param event ApiErrorWithMessageEvent Contains the error message.
+     */
+    @Subscribe
+    public void onEventMainThread(ApiErrorWithMessageEvent event) {
+        switch (event.getRequestTag()) {
+            case Constant.GET_CATEGORIES_REQUEST_TAG:
+                dismissProgress();
+                CommonUtils.displayToast(getContext(), event.getResultMsgUser());
+                break;
+
+            default:
+                break;
+        }
     }
 
 }

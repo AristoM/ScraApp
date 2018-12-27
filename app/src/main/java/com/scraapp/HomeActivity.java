@@ -14,17 +14,19 @@ import com.scraapp.utility.Constant;
 public class HomeActivity extends BaseApp implements BaseMediator {
 
     @Override
+    public int getlayout() {
+        return R.layout.activity_home;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mConfirmPickup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mConfirmPickup.setOnClickListener(view -> {
 
-                Intent product = new Intent(HomeActivity.this, ProductsActivity.class);
-                startActivity(product);
+            Intent product = new Intent(HomeActivity.this, ProductsActivity.class);
+            startActivity(product);
 
-            }
         });
 
     }

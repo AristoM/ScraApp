@@ -7,6 +7,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.scraapp.network.event.RequestFinishedEvent;
 import com.scraapp.network.request.AbstractApiRequest;
+import com.scraapp.network.request.GetAllCategoryRequest;
+import com.scraapp.network.request.GetCategoriesRequestParam;
 import com.scraapp.network.request.LoginRequestParam;
 import com.scraapp.network.request.SignInApiRequest;
 import com.scraapp.network.request.SignUpRequest;
@@ -118,7 +120,11 @@ public class ApiClient {
     // Request functions
     // ============================================================================================
 
-
+    public void getAllCategoriesRequest(GetCategoriesRequestParam getCategoriesRequestParam) {
+        GetAllCategoryRequest request = new GetAllCategoryRequest(mApiService, getCategoriesRequestParam);
+        requests.put(getCategoriesRequestParam.getmRequestTag(), request);
+        request.execute();
+    }
 
     public void signInRequest(LoginRequestParam loginRequestParam) {
         SignInApiRequest request = new SignInApiRequest(mApiService, loginRequestParam);
