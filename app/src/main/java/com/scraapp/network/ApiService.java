@@ -4,6 +4,7 @@ import com.scraapp.network.request.GetCategoriesRequestParam;
 import com.scraapp.network.request.LoginRequestParam;
 import com.scraapp.network.request.SignupRequestParam;
 import com.scraapp.network.response.AbstractApiResponse;
+import com.scraapp.network.response.CategoriesResponse;
 import com.scraapp.network.response.SignInResponse;
 
 import retrofit2.Call;
@@ -35,7 +36,7 @@ public interface ApiService {
     Call<AbstractApiResponse> signUpCall(@Body SignupRequestParam body);
 
     @POST("categories/")
-    Call<AbstractApiResponse> getAllCategories(@Body GetCategoriesRequestParam body);
+    Call<CategoriesResponse> getAllCategories(@Body GetCategoriesRequestParam body);
 
 
 }

@@ -1,94 +1,51 @@
 package com.scraapp;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
-import android.view.Window;
-import android.view.WindowManager;
+import android.app.Application;
 
+import com.scraapp.greendao.DaoMaster;
+import com.scraapp.greendao.DaoSession;
 import com.scraapp.network.ApiClient;
-import com.scraapp.network.request.RetroFitApp;
 
-import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.greendao.database.Database;
 
-abstract public class ScrApp extends AppCompatActivity {
+public class ScrApp extends Application {
 
-    private Handler mHandler;
-    private ProgressDialog mDialog;
+    private final String TAG = "ScrApp";
+    private ApiClient mApiClient;
+    private static ScrApp scrApp;
 
-    protected EventBus mEventBus;
-    protected ApiClient mApiClient;
-
-    protected Context mContext;
-
-
-    public abstract int getlayout();
+    private DaoSession daoSession;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate() {
+        super.onCreate();
+        scrApp = this;
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "categories-db");
+        Database db = helper.getWritableDb();
 
-        setContentView(getlayout());
+        daoSession = new DaoMaster(db).newSession();
 
-        mEventBus = EventBus.getDefault();
-        mApiClient = getApp().getApiClient();
-        mContext = this;
-
-        if (!mEventBus.isRegistered(this)) {
-            mEventBus.register(this);
-        }
     }
 
-    public RetroFitApp getApp() {
-        return (RetroFitApp) getApplication();
-    }
-
-    public Context getContext() {
-        return mContext;
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
+    public ApiClient getApiClient() {
+        return mApiClient != null ? mApiClient : initApiClient();
     }
 
     /**
-     * Initialize Loading Dialog
+     * Initialize the {@link ApiClient}
      */
-    protected void initDialog(Context context) {
-        this.mContext = context;
-        mDialog = new ProgressDialog(mContext);
-        mDialog.setMessage(getString(R.string.loading));
-
-        mHandler = new Handler();
+    private ApiClient initApiClient() {
+        mApiClient = new ApiClient(this);
+        return mApiClient;
     }
 
-    protected void dismissProgress() {
-        if (mHandler != null && mDialog != null) {
-            mHandler.post(() -> mDialog.dismiss());
-        }
+    public static ScrApp getApp() {
+        return scrApp;
     }
 
-    protected void showProgress() {
-        if (mHandler != null && mDialog != null) {
-
-            mHandler.post(() -> {
-                if (!mDialog.isShowing()) {
-                    mDialog.show();
-                }
-//        hideKeyboard(edt);
-            });
-        }
+    public DaoSession getDaoSession() {
+        return daoSession;
     }
 
 }

@@ -2,6 +2,7 @@ package com.scraapp.network.request;
 
 import android.content.Context;
 
+import com.scraapp.ScrApp;
 import com.scraapp.network.ApiService;
 import com.scraapp.utility.Helper;
 
@@ -27,7 +28,7 @@ public abstract class AbstractApiRequest {
     AbstractApiRequest(ApiService apiService, String tag) {
         this.apiService = apiService;
         this.tag = tag;
-        context = RetroFitApp.getApp();
+        context = ScrApp.getApp();
     }
 
     /**

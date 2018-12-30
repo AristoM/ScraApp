@@ -29,7 +29,7 @@ public class AbstractApiResponse implements Serializable {
         this.message = message;
     }
 
-    String getStatus() {
+    public String getStatus() {
         return status;
     }
 

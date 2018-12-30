@@ -2,13 +2,11 @@ package com.scraapp;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,22 +15,15 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
-import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -53,19 +44,25 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.scraapp.greendao.Categories;
+import com.scraapp.greendao.CategoriesDao;
+import com.scraapp.greendao.DaoSession;
 import com.scraapp.network.event.ApiErrorEvent;
 import com.scraapp.network.event.ApiErrorWithMessageEvent;
 import com.scraapp.network.request.GetCategoriesRequestParam;
-import com.scraapp.network.request.RetroFitApp;
-import com.scraapp.network.response.AbstractApiResponse;
+import com.scraapp.network.response.CategoriesResponse;
+import com.scraapp.network.response.Products;
 import com.scraapp.utility.ActionRequest;
 import com.scraapp.utility.Constant;
 import com.scraapp.utility.CustomTypefaceSpan;
 import com.scraapp.utility.ScraAppTextView;
 
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.greendao.query.Query;
 
-public abstract class BaseApp extends ScrApp implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+import java.util.List;
+
+public abstract class BaseApp extends ScrAppActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         com.google.android.gms.location.LocationListener, NavigationView.OnNavigationItemSelectedListener{
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -163,7 +160,10 @@ public abstract class BaseApp extends ScrApp implements OnMapReadyCallback, Goog
 
         initApi();
         initDialog(getContext());
+
     }
+
+
 
     private void initApi() {
         GetCategoriesRequestParam getCategoriesRequestParam = new GetCategoriesRequestParam(null,
@@ -171,8 +171,8 @@ public abstract class BaseApp extends ScrApp implements OnMapReadyCallback, Goog
         mApiClient.getAllCategoriesRequest(getCategoriesRequestParam);
     }
 
-    public RetroFitApp getApp() {
-        return (RetroFitApp) getApplication();
+    public ScrApp getApp() {
+        return (ScrApp) getApplication();
     }
 
 
@@ -677,6 +677,7 @@ public abstract class BaseApp extends ScrApp implements OnMapReadyCallback, Goog
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
+            deleteDB();
             return;
         }
 
@@ -686,17 +687,27 @@ public abstract class BaseApp extends ScrApp implements OnMapReadyCallback, Goog
         new Handler().postDelayed(() -> doubleBackToExitPressedOnce=false, 2000);
     }
 
+    private void deleteDB() {
+        categoriesDao.deleteAll();
+    }
+
     /**
      * Response of Uploaded File
      *
      * @param apiResponse UploadFileResponse
      */
     @Subscribe
-    public void onEventMainThread(AbstractApiResponse apiResponse) {
+    public void onEventMainThread(CategoriesResponse apiResponse) {
         switch (apiResponse.getRequestTag()) {
             case Constant.GET_CATEGORIES_REQUEST_TAG:
                 dismissProgress();
-                CommonUtils.displayToast(getContext(), apiResponse.getMessage());
+                CommonUtils.displayToast(getContext(), apiResponse.getStatus());
+
+                List<Products> categoriesList = apiResponse.getResult().getProducts();
+                for(Products products: categoriesList) {
+                    Categories categories = new Categories(null, products.getId(), products.getName(), products.getDescription());
+                    categoriesDao.insert(categories);
+                }
 
                 break;
             default:

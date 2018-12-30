@@ -2,8 +2,8 @@ package com.scraapp.network.request;
 
 import com.scraapp.R;
 import com.scraapp.network.ApiService;
-import com.scraapp.network.response.AbstractApiResponse;
 import com.scraapp.network.response.ApiCallback;
+import com.scraapp.network.response.CategoriesResponse;
 
 import retrofit2.Call;
 
@@ -15,11 +15,11 @@ public class GetAllCategoryRequest extends AbstractApiRequest {
      * + The callback used for this request. Declared globally for cancellation. See {@link
      * #cancel()}.
      */
-    private ApiCallback<AbstractApiResponse> callback;
+    private ApiCallback<CategoriesResponse> callback;
     /**
      * To cancel REST API call from Retrofit. See {@link #cancel()}.
      */
-    private Call<AbstractApiResponse> call;
+    private Call<CategoriesResponse> call;
 
     /**
      * Initialize the request with the passed values.

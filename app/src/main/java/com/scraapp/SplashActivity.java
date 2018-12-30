@@ -21,7 +21,7 @@ import com.scraapp.utility.Constant;
 
 import org.greenrobot.eventbus.Subscribe;
 
-public class SplashActivity extends ScrApp {
+public class SplashActivity extends ScrAppActivity {
 
     Button loginCta, signupCta;
     TextView registerCta;
