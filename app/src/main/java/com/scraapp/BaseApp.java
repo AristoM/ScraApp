@@ -704,6 +704,7 @@ public abstract class BaseApp extends ScrAppActivity implements OnMapReadyCallba
                 CommonUtils.displayToast(getContext(), apiResponse.getStatus());
 
                 List<Products> categoriesList = apiResponse.getResult().getProducts();
+                deleteDB();
                 for(Products products: categoriesList) {
                     Categories categories = new Categories(null, products.getId(), products.getName(), products.getDescription());
                     categoriesDao.insert(categories);

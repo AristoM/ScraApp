@@ -10,10 +10,12 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.scraapp.greendao.Categories;
 import com.scraapp.greendao.CategoriesDao;
@@ -21,6 +23,7 @@ import com.scraapp.greendao.DaoSession;
 
 import org.greenrobot.greendao.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductsActivity extends AppCompatActivity {
@@ -32,7 +35,9 @@ public class ProductsActivity extends AppCompatActivity {
     private DaoSession daoSession;
 
     private LinearLayout productsLayout;
-    private ImageView plusCta;
+    private Button confirmCta;
+
+    private List<EditText> productsEt;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,6 +46,7 @@ public class ProductsActivity extends AppCompatActivity {
         setContentView(R.layout.products_layout);
 
         productsLayout = findViewById(R.id.products_list_layout);
+        confirmCta = findViewById(R.id.confirm_cta);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -54,7 +60,10 @@ public class ProductsActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setSubtitleTextColor(Color.WHITE);
 
+        productsEt = new ArrayList<>();
+
         initDAO();
+        handleOnclick();
 
     }
 
@@ -67,6 +76,15 @@ public class ProductsActivity extends AppCompatActivity {
         categoriesQuery = categoriesDao.queryBuilder().orderAsc(CategoriesDao.Properties.Id).build();
         updateCategories();
 
+    }
+
+    private void handleOnclick() {
+        confirmCta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     private void updateCategories() {
@@ -94,20 +112,15 @@ public class ProductsActivity extends AppCompatActivity {
         LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = vi.inflate(R.layout.product_dynamic_view, null);
 
-        // fill in any details dynamically here
-        ImageView plusCta = v.findViewById(R.id.plus_cta);
         TextView productName = v.findViewById(R.id.product_name);
-        EditText editText = v.findViewById(R.id.quantity);
-
-        editText.setEnabled(true);
-        editText.setClickable(true);
-        editText.setFocusable(true);
+        EditText quantityEt = v.findViewById(R.id.quantity);
 
         productName.setText(name);
+        productsEt.add(quantityEt);
 
         // insert into main view
-        ViewGroup insertPoint = (ViewGroup) findViewById(R.id.products_list_layout);
-        insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+        LinearLayout insertPoint = findViewById(R.id.products_list_layout);
+        insertPoint.addView(v);
     }
 
 
