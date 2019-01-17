@@ -23,8 +23,9 @@ import com.scraapp.greendao.DaoSession;
 
 import org.greenrobot.greendao.query.Query;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProductsActivity extends AppCompatActivity {
 
@@ -37,7 +38,7 @@ public class ProductsActivity extends AppCompatActivity {
     private LinearLayout productsLayout;
     private Button confirmCta;
 
-    private List<EditText> productsEt;
+    private Map<String, EditText> productList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,7 +61,7 @@ public class ProductsActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setSubtitleTextColor(Color.WHITE);
 
-        productsEt = new ArrayList<>();
+        productList = new HashMap<String, EditText>();
 
         initDAO();
         handleOnclick();
@@ -83,6 +84,9 @@ public class ProductsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                for(Map.Entry<String, EditText> entry: productList.entrySet()) {
+
+                }
             }
         });
     }
@@ -93,7 +97,7 @@ public class ProductsActivity extends AppCompatActivity {
         String name = categories.get(0).getName();
 
         for(Categories category: categories) {
-            addView(category.getName());
+            addView(category);
         }
 
     }
@@ -108,15 +112,15 @@ public class ProductsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void addView(String name) {
+    private void addView(Categories categories) {
         LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = vi.inflate(R.layout.product_dynamic_view, null);
 
         TextView productName = v.findViewById(R.id.product_name);
         EditText quantityEt = v.findViewById(R.id.quantity);
 
-        productName.setText(name);
-        productsEt.add(quantityEt);
+        productName.setText(categories.getName());
+        productList.put(categories.getId(), quantityEt);
 
         // insert into main view
         LinearLayout insertPoint = findViewById(R.id.products_list_layout);
