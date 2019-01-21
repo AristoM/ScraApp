@@ -2,9 +2,11 @@ package com.scraapp.network;
 
 import com.scraapp.network.request.GetCategoriesRequestParam;
 import com.scraapp.network.request.LoginRequestParam;
+import com.scraapp.network.request.PlaceOrderRequestParam;
 import com.scraapp.network.request.SignupRequestParam;
 import com.scraapp.network.response.AbstractApiResponse;
 import com.scraapp.network.response.CategoriesResponse;
+import com.scraapp.network.response.PlaceOrderResponse;
 import com.scraapp.network.response.SignInResponse;
 
 import retrofit2.Call;
@@ -38,5 +40,7 @@ public interface ApiService {
     @POST("categories/")
     Call<CategoriesResponse> getAllCategories(@Body GetCategoriesRequestParam body);
 
+    @POST("orders/")
+    Call<PlaceOrderResponse> placeOrder(@Body PlaceOrderRequestParam body);
 
 }

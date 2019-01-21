@@ -58,16 +58,20 @@ class CommonUtils {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
-    static void saveSharedPref(Context context, String prefFileName, String key, String value) {
-        SharedPreferences sp = context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE);
+    static void saveSharedPref(String prefFileName, String key, String value) {
+        SharedPreferences sp = getSharedpref(prefFileName);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(key, value);
         editor.apply();
 
     }
 
-    static String getSharedPref(Context context, String prefFileName, String key) {
-        SharedPreferences sp = context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE);
+    private static SharedPreferences getSharedpref(String prefFileName) {
+        return ScrApp.getApp().getSharedPreferences(prefFileName, Context.MODE_PRIVATE);
+    }
+
+    static String getSharedPref(String prefFileName, String key) {
+        SharedPreferences sp = getSharedpref(prefFileName);
         return sp.getString(key, null);
     }
 

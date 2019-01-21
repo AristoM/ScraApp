@@ -25,6 +25,10 @@ public class HomeActivity extends BaseApp implements BaseMediator {
         mConfirmPickup.setOnClickListener(view -> {
 
             Intent product = new Intent(HomeActivity.this, ProductsActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("lat", latLong.latitude + "");
+            bundle.putString("lan", latLong.longitude + "");
+            product.putExtras(bundle);
             startActivity(product);
 
         });

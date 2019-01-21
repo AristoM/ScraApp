@@ -4,30 +4,31 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.scraapp.greendao.Categories;
 import com.scraapp.greendao.CategoriesDao;
 import com.scraapp.greendao.DaoSession;
+import com.scraapp.network.request.OrderItems;
+import com.scraapp.network.request.PlaceOrderRequestParam;
+import com.scraapp.utility.ActionRequest;
+import com.scraapp.utility.Constant;
 
 import org.greenrobot.greendao.query.Query;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ProductsActivity extends AppCompatActivity {
+public class ProductsActivity extends ScrAppActivity {
 
     Toolbar toolbar;
 
@@ -39,12 +40,16 @@ public class ProductsActivity extends AppCompatActivity {
     private Button confirmCta;
 
     private Map<String, EditText> productList;
+    String lat, lan;
+
+    @Override
+    public int getlayout() {
+        return R.layout.products_layout;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.products_layout);
 
         productsLayout = findViewById(R.id.products_list_layout);
         confirmCta = findViewById(R.id.confirm_cta);
@@ -63,6 +68,13 @@ public class ProductsActivity extends AppCompatActivity {
 
         productList = new HashMap<String, EditText>();
 
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null) {
+            lat = bundle.getString("lat");
+            lan = bundle.getString("lan");
+        }
+
+
         initDAO();
         handleOnclick();
 
@@ -80,14 +92,30 @@ public class ProductsActivity extends AppCompatActivity {
     }
 
     private void handleOnclick() {
-        confirmCta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        confirmCta.setOnClickListener(view -> {
 
-                for(Map.Entry<String, EditText> entry: productList.entrySet()) {
+            List<OrderItems> orderItemsList = new ArrayList<>();
 
-                }
+            for(Map.Entry<String, EditText> entry: productList.entrySet()) {
+                OrderItems orderItem = new OrderItems();
+                orderItem.setUnit("kg");
+                orderItem.setWeight(entry.getValue().getText().toString());
+                orderItem.setCategory_id(entry.getKey());
+                orderItemsList.add(orderItem);
             }
+
+
+            if (!mApiClient.isRequestRunning(Constant.PLACE_ORDER_REQUEST_TAG)) {
+                showProgress();
+                PlaceOrderRequestParam placeOrderRequestParam = new PlaceOrderRequestParam(null, Constant.PLACE_ORDER_REQUEST_TAG, orderItemsList);
+                placeOrderRequestParam.setAction(ActionRequest.NEW_ORDER);
+                placeOrderRequestParam.setUser_id(CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USERID));
+                placeOrderRequestParam.setLat(lat);
+                placeOrderRequestParam.setLon(lan);
+                placeOrderRequestParam.setOrder_placed_date("1");
+                mApiClient.placeOrderRequest(placeOrderRequestParam);
+            }
+
         });
     }
 

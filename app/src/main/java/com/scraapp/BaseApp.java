@@ -83,6 +83,7 @@ public abstract class BaseApp extends ScrAppActivity implements OnMapReadyCallba
     protected Button mConfirmPickup;
 
     protected NavigationView navView;
+    protected LatLng latLong;
 
     int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 2;
@@ -578,8 +579,6 @@ public abstract class BaseApp extends ScrAppActivity implements OnMapReadyCallba
         // check if map is created successfully or not
         if (mMap != null) {
             mMap.getUiSettings().setZoomControlsEnabled(false);
-            LatLng latLong;
-
 
             latLong = new LatLng(location.getLatitude(), location.getLongitude());
 
@@ -636,10 +635,6 @@ public abstract class BaseApp extends ScrAppActivity implements OnMapReadyCallba
                 Place place = PlaceAutocomplete.getPlace(getContext(), data);
 
                 // TODO call location based filter
-
-
-                LatLng latLong;
-
 
                 latLong = place.getLatLng();
 

@@ -50,7 +50,7 @@ public class SplashActivity extends ScrAppActivity {
         mMobileSignup = findViewById(R.id.mobile_signup);
         mEmailSignup = findViewById(R.id.email_signup);
 
-        if(!TextUtils.isEmpty(CommonUtils.getSharedPref(this, Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME))) {
+        if(!TextUtils.isEmpty(CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME))) {
             loginProcess();
         } else {
             signInLayout.setVisibility(View.VISIBLE);
@@ -183,13 +183,14 @@ public class SplashActivity extends ScrAppActivity {
                 dismissProgress();
                 CommonUtils.displayToast(getContext(), apiResponse.getMessage());
 
-                if(!TextUtils.isEmpty(CommonUtils.getSharedPref(this, Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME))) {
-                    sUname = CommonUtils.getSharedPref(this, Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME);
-                    sPwd = CommonUtils.getSharedPref(this, Constant.SP_FILE_LOGIN, Constant.SP_PASSWORD);
+                if(!TextUtils.isEmpty(CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME))) {
+                    sUname = CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME);
+                    sPwd = CommonUtils.getSharedPref( Constant.SP_FILE_LOGIN, Constant.SP_PASSWORD);
                 } else {
                     SignInResponse signInResponse = (SignInResponse) apiResponse;
-                    CommonUtils.saveSharedPref(this, Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME, sUname);
-                    CommonUtils.saveSharedPref(this, Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME, sPwd);
+                    CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME, sUname);
+                    CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_PASSWORD, sPwd);
+                    CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USERID, ((SignInResponse) apiResponse).getResult().getUser().getId());
                 }
 
                 Intent intent = new Intent(SplashActivity.this, HomeActivity.class);

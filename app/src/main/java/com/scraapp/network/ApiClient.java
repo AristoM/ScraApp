@@ -10,6 +10,8 @@ import com.scraapp.network.request.AbstractApiRequest;
 import com.scraapp.network.request.GetAllCategoryRequest;
 import com.scraapp.network.request.GetCategoriesRequestParam;
 import com.scraapp.network.request.LoginRequestParam;
+import com.scraapp.network.request.PlaceOrderRequest;
+import com.scraapp.network.request.PlaceOrderRequestParam;
 import com.scraapp.network.request.SignInApiRequest;
 import com.scraapp.network.request.SignUpRequest;
 import com.scraapp.network.request.SignupRequestParam;
@@ -135,6 +137,12 @@ public class ApiClient {
     public void signUpRequest(SignupRequestParam signupRequestParam) {
         SignUpRequest request = new SignUpRequest(mApiService, signupRequestParam);
         requests.put(signupRequestParam.getmRequestTag(), request);
+        request.execute();
+    }
+
+    public void placeOrderRequest(PlaceOrderRequestParam placeOrderRequestParam) {
+        PlaceOrderRequest request = new PlaceOrderRequest(mApiService, placeOrderRequestParam);
+        requests.put(placeOrderRequestParam.getmRequestTag(), request);
         request.execute();
     }
 
