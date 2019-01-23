@@ -102,6 +102,8 @@ public class SplashActivity extends ScrAppActivity {
         } else if(signUpLayout.getVisibility() == View.VISIBLE) {
             signInLayout.setVisibility(View.VISIBLE);
             signUpLayout.setVisibility(View.INVISIBLE);
+        } else {
+            super.onBackPressed();
         }
 
     }
