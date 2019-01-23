@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,15 +13,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.scraapp.greendao.Categories;
 import com.scraapp.greendao.CategoriesDao;
 import com.scraapp.greendao.DaoSession;
+import com.scraapp.network.event.ApiErrorEvent;
+import com.scraapp.network.event.ApiErrorWithMessageEvent;
 import com.scraapp.network.request.OrderItems;
 import com.scraapp.network.request.PlaceOrderRequestParam;
+import com.scraapp.network.response.AbstractApiResponse;
+import com.scraapp.network.response.PlaceOrderResponse;
 import com.scraapp.utility.ActionRequest;
 import com.scraapp.utility.Constant;
 
+import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.greendao.query.Query;
 
 import java.util.ArrayList;
@@ -99,7 +106,7 @@ public class ProductsActivity extends ScrAppActivity {
             for(Map.Entry<String, EditText> entry: productList.entrySet()) {
                 OrderItems orderItem = new OrderItems();
                 orderItem.setUnit("kg");
-                orderItem.setWeight(entry.getValue().getText().toString());
+                orderItem.setWeight(Double.valueOf(entry.getValue().getText().toString()));
                 orderItem.setCategory_id(entry.getKey());
                 orderItemsList.add(orderItem);
             }
@@ -107,7 +114,8 @@ public class ProductsActivity extends ScrAppActivity {
 
             if (!mApiClient.isRequestRunning(Constant.PLACE_ORDER_REQUEST_TAG)) {
                 showProgress();
-                PlaceOrderRequestParam placeOrderRequestParam = new PlaceOrderRequestParam(null, Constant.PLACE_ORDER_REQUEST_TAG, orderItemsList);
+                PlaceOrderRequestParam placeOrderRequestParam = new PlaceOrderRequestParam(null, Constant.PLACE_ORDER_REQUEST_TAG);
+                placeOrderRequestParam.setOrder_items(orderItemsList);
                 placeOrderRequestParam.setAction(ActionRequest.NEW_ORDER);
                 placeOrderRequestParam.setUser_id(CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USERID));
                 placeOrderRequestParam.setLat(lat);
@@ -153,6 +161,53 @@ public class ProductsActivity extends ScrAppActivity {
         // insert into main view
         LinearLayout insertPoint = findViewById(R.id.products_list_layout);
         insertPoint.addView(v);
+    }
+
+    @Subscribe
+    public void onEventMainThread(AbstractApiResponse apiResponse) {
+        switch (apiResponse.getRequestTag()) {
+            case Constant.PLACE_ORDER_REQUEST_TAG:
+                dismissProgress();
+                PlaceOrderResponse placeOrderResponse = (PlaceOrderResponse) apiResponse;
+                Toast.makeText(this, placeOrderResponse.getMessage(), Toast.LENGTH_SHORT).show();
+
+                break;
+        }
+
+    }
+
+    /**
+     * EventBus listener. An API call failed. No error message was returned.
+     *
+     * @param event ApiErrorEvent
+     */
+    @Subscribe
+    public void onEventMainThread(ApiErrorEvent event) {
+        switch (event.getRequestTag()) {
+            case Constant.PLACE_ORDER_REQUEST_TAG:
+                dismissProgress();
+                CommonUtils.displayToast(getContext(), event.getRetrofitError().toString());
+                Log.e("okhttp", event.getRetrofitError().toString());
+
+                break;
+        }
+    }
+
+
+    /**
+     * EventBus listener. An API call failed. An error message was returned.
+     *
+     * @param event ApiErrorWithMessageEvent Contains the error message.
+     */
+    @Subscribe
+    public void onEventMainThread(ApiErrorWithMessageEvent event) {
+        switch (event.getRequestTag()) {
+            case Constant.PLACE_ORDER_REQUEST_TAG:
+                dismissProgress();
+                CommonUtils.displayToast(getContext(), event.getResultMsgUser());
+                break;
+        }
+
     }
 
 

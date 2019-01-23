@@ -10,9 +10,8 @@ public class PlaceOrderRequestParam extends RequestParam {
 
     private List<OrderItems> order_items;
 
-    public PlaceOrderRequestParam(ApiService apiService, String requestTag, List<OrderItems> order_items) {
+    public PlaceOrderRequestParam(ApiService apiService, String requestTag) {
         super(apiService, requestTag);
-        this.order_items = order_items;
     }
 
     public String getAction() {

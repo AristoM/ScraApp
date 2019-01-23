@@ -2,7 +2,9 @@ package com.scraapp.network.request;
 
 public class OrderItems {
 
-    private String category_id, weight, unit;
+    private String category_id, unit;
+
+    private double weight;
 
     public String getCategory_id() {
         return category_id;
@@ -12,11 +14,11 @@ public class OrderItems {
         this.category_id = category_id;
     }
 
-    public String getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public void setWeight(String weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
