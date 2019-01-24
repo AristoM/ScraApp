@@ -3,11 +3,16 @@ package com.scraapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.scraapp.frgments.BaseFragment;
+import com.scraapp.frgments.SettingsFragment;
 import com.scraapp.mediators.BaseMediator;
 import com.scraapp.utility.Constant;
 
@@ -41,7 +46,11 @@ public class HomeActivity extends BaseApp implements BaseMediator {
         int id = item.getItemId();
 
         if (id == R.id.nav_my_orders) {
-            CommonUtils.displayToast(mContext, "myorder");
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            SettingsFragment fragment = new SettingsFragment();
+            fragmentTransaction.add(R.id.fragment_layout, fragment);
+            fragmentTransaction.commit();
         } else if (id == R.id.nav_settings) {
             CommonUtils.displayToast(mContext, "settings");
         } else if (id == R.id.nav_signout) {
@@ -55,7 +64,7 @@ public class HomeActivity extends BaseApp implements BaseMediator {
 
 
     @Override
-    public void commitFragment() {
+    public void commitFragment(BaseFragment baseFragment) {
 
 
     }

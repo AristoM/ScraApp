@@ -23,7 +23,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -82,6 +85,8 @@ public abstract class BaseApp extends ScrAppActivity implements OnMapReadyCallba
 
     protected Button mConfirmPickup;
 
+    FrameLayout frameLayout;
+
     protected NavigationView navView;
     protected LatLng latLong;
 
@@ -90,6 +95,10 @@ public abstract class BaseApp extends ScrAppActivity implements OnMapReadyCallba
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         super.onCreate(savedInstanceState);
 
         mApiClient = getApp().getApiClient();
@@ -99,6 +108,8 @@ public abstract class BaseApp extends ScrAppActivity implements OnMapReadyCallba
 
         mLocationAddress = findViewById(R.id.pickup_location);
         mConfirmPickup = findViewById(R.id.confirm_pickup);
+
+        frameLayout = findViewById(R.id.fragment_layout);
 
         mLocationAddress.setOnClickListener(view -> openAutocompleteActivity());
 

@@ -10,15 +10,18 @@ import android.view.ViewGroup;
 
 import com.scraapp.R;
 
-public class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment {
 
     View view;
+
+    protected abstract int getLayout();
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.toolbar_layout, container, false);
+        view = inflater.inflate(getLayout(), container, false);
         return view;
     }
 }
