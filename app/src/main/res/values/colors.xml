@@ -7,4 +7,6 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="transparent">#80000000</color>
+
+    <color name="light_gray">#CCD3D3D3</color>
 </resources>

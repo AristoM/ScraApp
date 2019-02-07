@@ -31,7 +31,7 @@
             android:name=".FetchAddressIntentService"
             android:exported="false" />
 
-        <activity android:name=".HomeActivity"/>
+        <activity android:name=".BaseActivity"/>
 
         <activity android:name=".ProductsActivity"/>
 

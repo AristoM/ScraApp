@@ -6,7 +6,7 @@ import java.util.List;
 
 public class PlaceOrderRequestParam extends RequestParam {
 
-    private String action, User_id, Lat, Lon, order_placed_date;
+    private String action, user_id, lat, lon, order_placed_date;
 
     private List<OrderItems> order_items;
 
@@ -23,27 +23,27 @@ public class PlaceOrderRequestParam extends RequestParam {
     }
 
     public String getUser_id() {
-        return User_id;
+        return user_id;
     }
 
     public void setUser_id(String user_id) {
-        User_id = user_id;
+        this.user_id = user_id;
     }
 
     public String getLat() {
-        return Lat;
+        return lat;
     }
 
     public void setLat(String lat) {
-        Lat = lat;
+        this.lat = lat;
     }
 
     public String getLon() {
-        return Lon;
+        return lon;
     }
 
     public void setLon(String lon) {
-        Lon = lon;
+        this.lon = lon;
     }
 
     public String getOrder_placed_date() {

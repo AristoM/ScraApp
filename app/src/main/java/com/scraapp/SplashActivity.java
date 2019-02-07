@@ -200,7 +200,7 @@ public class SplashActivity extends ScrAppActivity {
                     CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USERID, ((SignInResponse) apiResponse).getResult().getUser().getId());
                 }
 
-                Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
+                Intent intent = new Intent(SplashActivity.this, BaseActivity.class);
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 startActivity(intent);
                 finish();
