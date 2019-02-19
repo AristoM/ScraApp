@@ -6,23 +6,23 @@ import android.support.v4.app.ActivityCompat;
 
 import com.scraapp.R;
 
-public class GPSSettingDialog extends YesAndNoDialog {
+public class SignOutDialog extends YesAndNoDialog {
 
-    int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    public static int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 99;
 
     @Override
     public String setTitle() {
-        return getString(R.string.permission);
+        return getString(R.string.signout);
     }
 
     @Override
     public String setMessage() {
-        return getString(R.string.need_to_access_your_location);
+        return getString(R.string.do_you_wish_to_logout);
     }
 
     @Override
     public String positiveText() {
-        return getString(R.string.settings);
+        return getString(R.string.ok);
     }
 
     @Override
@@ -33,15 +33,12 @@ public class GPSSettingDialog extends YesAndNoDialog {
     @Override
     public DialogInterface.OnClickListener positiveButtonClick() {
 
-        return (dialogInterface, i) -> ActivityCompat.requestPermissions(getActivity(),
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        return (dialogInterface, i) -> dismiss();
     }
 
     @Override
     public DialogInterface.OnClickListener negativeButtonClick() {
         return (dialogInterface, i) -> dismiss();
     }
-
 
 }

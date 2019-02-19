@@ -56,7 +56,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Callba
     MapView mMapView;
     private GoogleMap mMap;
 
-    private LatLng mCenterLatLong;
     private AddressResultReceiver mResultReceiver;
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 3;
@@ -192,14 +191,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Callba
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
                 Log.d("Camera postion change" + "", cameraPosition + "");
-                mCenterLatLong = cameraPosition.target;
+                latLong = cameraPosition.target;
 
                 mMap.clear();
 
                 try {
                     Location mLocation = new Location("");
-                    mLocation.setLatitude(mCenterLatLong.latitude);
-                    mLocation.setLongitude(mCenterLatLong.longitude);
+                    mLocation.setLatitude(latLong.latitude);
+                    mLocation.setLongitude(latLong.longitude);
 
                     startIntentService(mLocation);
 //                    mLocationMarkerText.setText("Lat : " + mCenterLatLong.latitude + "," + "Long : " + mCenterLatLong.longitude);

@@ -1,10 +1,17 @@
 package com.scraapp;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -15,6 +22,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.scraapp.dialog.ApproximateDialog;
+import com.scraapp.dialog.OrderSuccessDialog;
+import com.scraapp.dialog.YesAndNoDialog;
 import com.scraapp.greendao.Categories;
 import com.scraapp.greendao.CategoriesDao;
 import com.scraapp.greendao.DaoSession;
@@ -85,6 +95,20 @@ public class ProductsActivity extends ScrAppActivity {
         initDAO();
         handleOnclick();
 
+        openDialog(new ApproximateDialog());
+
+    }
+
+    private void openDialog(YesAndNoDialog dialogFragment) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+//        ApproximateDialog approximateDialog = new ApproximateDialog();
+        dialogFragment.show(ft, "dialog");
     }
 
     private void initDAO() {
@@ -98,7 +122,40 @@ public class ProductsActivity extends ScrAppActivity {
 
     }
 
+    private void enableConfirmCta(boolean isEnable) {
+        confirmCta.setEnabled(isEnable);
+    }
+
     private void handleOnclick() {
+
+        for(Map.Entry<String, EditText> entry: productList.entrySet()) {
+
+            entry.getValue().addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    for(Map.Entry<String, EditText> entry: productList.entrySet()) {
+                        if(!TextUtils.isEmpty(entry.getValue().getText().toString())) {
+                            enableConfirmCta(true);
+                            return;
+                        } else {
+                            enableConfirmCta(false);
+                        }
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            });
+
+        }
+
         confirmCta.setOnClickListener(view -> {
 
             List<OrderItems> orderItemsList = new ArrayList<>();
@@ -106,22 +163,32 @@ public class ProductsActivity extends ScrAppActivity {
             for(Map.Entry<String, EditText> entry: productList.entrySet()) {
                 OrderItems orderItem = new OrderItems();
                 orderItem.setUnit("kg");
-                orderItem.setWeight(Double.valueOf(entry.getValue().getText().toString()));
-                orderItem.setCategory_id(entry.getKey());
-                orderItemsList.add(orderItem);
+                double weight = 0;
+                if(!TextUtils.isEmpty(entry.getValue().getText().toString())) {
+                    weight = Double.valueOf(entry.getValue().getText().toString());
+                }
+                if(weight > 0) {
+                    orderItem.setWeight(weight);
+                    orderItem.setCategory_id(entry.getKey());
+                    orderItemsList.add(orderItem);
+                }
             }
 
 
             if (!mApiClient.isRequestRunning(Constant.PLACE_ORDER_REQUEST_TAG)) {
-                showProgress();
-                PlaceOrderRequestParam placeOrderRequestParam = new PlaceOrderRequestParam(null, Constant.PLACE_ORDER_REQUEST_TAG);
-                placeOrderRequestParam.setOrder_items(orderItemsList);
-                placeOrderRequestParam.setAction(ActionRequest.NEW_ORDER);
-                placeOrderRequestParam.setUser_id(CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USERID));
-                placeOrderRequestParam.setLat(lat);
-                placeOrderRequestParam.setLon(lan);
-                placeOrderRequestParam.setOrder_placed_date("1");
-                mApiClient.placeOrderRequest(placeOrderRequestParam);
+                if(!orderItemsList.isEmpty()) {
+                    showProgress();
+                    PlaceOrderRequestParam placeOrderRequestParam = new PlaceOrderRequestParam(null, Constant.PLACE_ORDER_REQUEST_TAG);
+                    placeOrderRequestParam.setOrder_items(orderItemsList);
+                    placeOrderRequestParam.setAction(ActionRequest.NEW_ORDER);
+                    placeOrderRequestParam.setUser_id(CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USERID));
+                    placeOrderRequestParam.setLat(lat);
+                    placeOrderRequestParam.setLon(lan);
+                    placeOrderRequestParam.setOrder_placed_date("1");
+                    mApiClient.placeOrderRequest(placeOrderRequestParam);
+                } else {
+
+                }
             }
 
         });
@@ -163,13 +230,16 @@ public class ProductsActivity extends ScrAppActivity {
         insertPoint.addView(v);
     }
 
+    // OnSuccess
     @Subscribe
     public void onEventMainThread(AbstractApiResponse apiResponse) {
         switch (apiResponse.getRequestTag()) {
             case Constant.PLACE_ORDER_REQUEST_TAG:
                 dismissProgress();
                 PlaceOrderResponse placeOrderResponse = (PlaceOrderResponse) apiResponse;
-                Toast.makeText(this, placeOrderResponse.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, placeOrderResponse.getMessage(), Toast.LENGTH_SHORT).show();
+
+                openDialog(new OrderSuccessDialog());
 
                 break;
         }
@@ -211,4 +281,8 @@ public class ProductsActivity extends ScrAppActivity {
     }
 
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        return false;
+    }
 }

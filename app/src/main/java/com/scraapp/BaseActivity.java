@@ -4,16 +4,33 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.SubMenu;
 import android.widget.LinearLayout;
+
+import com.scraapp.dialog.SignOutDialog;
+import com.scraapp.dialog.YesAndNoDialog;
+import com.scraapp.frgments.SettingsFragment;
+import com.scraapp.utility.Constant;
+import com.scraapp.utility.CustomTypefaceSpan;
 
 public class BaseActivity extends ClickAwareActivity {
 
     private static Context instance;
     LinearLayout parentLayout;
 
+    protected NavigationView navView;
     private DrawerLayout mDrawerLayout;
 
 
@@ -42,6 +59,39 @@ public class BaseActivity extends ClickAwareActivity {
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
+        navView = findViewById(R.id.nav_view);
+        Menu m = navView.getMenu();
+        for (int i = 0; i < m.size(); i++) {
+            MenuItem mi = m.getItem(i);
+
+            //for aapplying a font to subMenu ...
+            SubMenu subMenu = mi.getSubMenu();
+            if (subMenu != null && subMenu.size() > 0) {
+                for (int j = 0; j < subMenu.size(); j++) {
+                    MenuItem subMenuItem = subMenu.getItem(j);
+                    applyFontToMenuItem(subMenuItem);
+                }
+            }
+
+            //the method we have create in activity
+            applyFontToMenuItem(mi);
+        }
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navView.setNavigationItemSelectedListener(this);
+
+    }
+
+    private void applyFontToMenuItem(MenuItem mi) {
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/" + "Raleway-Bold.ttf");
+        SpannableString mNewTitle = new SpannableString(mi.getTitle());
+        mNewTitle.setSpan(new CustomTypefaceSpan("", font), 0, mNewTitle.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        mi.setTitle(mNewTitle);
     }
 
     public void commitFragment(Fragment fr) {
@@ -49,6 +99,55 @@ public class BaseActivity extends ClickAwareActivity {
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.parent_layout, fr);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_my_orders) {
+            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+            android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            SettingsFragment fragment = new SettingsFragment();
+            fragmentTransaction.add(R.id.fragment_layout, fragment);
+            fragmentTransaction.commit();
+        } else if (id == R.id.nav_settings) {
+            CommonUtils.displayToast(mContext, "settings");
+        } else if (id == R.id.nav_signout) {
+            signOutDialog(new SignOutDialog());
+        }
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void signOutDialog(YesAndNoDialog dialogFragment) {
+
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+//        ApproximateDialog approximateDialog = new ApproximateDialog();
+        dialogFragment.show(ft, "dialog");
+
+    }
+
+    public void signOut() {
+        SharedPreferences preferences = getSharedPreferences(Constant.SP_FILE_LOGIN, 0);
+        preferences.edit().remove(Constant.SP_USER_NAME).apply();
+        preferences.edit().remove(Constant.SP_PASSWORD).apply();
+
+        Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+
+        CommonUtils.displayToast(mContext, "Signed out");
+
     }
 
     @Override

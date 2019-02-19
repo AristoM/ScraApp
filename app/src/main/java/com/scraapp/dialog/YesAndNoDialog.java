@@ -12,9 +12,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-abstract public class YesOrNoDialog extends DialogFragment {
+abstract public class YesAndNoDialog extends DialogFragment {
 
     AlertDialog.Builder builder;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        getDialog().setCanceledOnTouchOutside(false);
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
 
     @NonNull
     @Override
@@ -25,10 +32,13 @@ abstract public class YesOrNoDialog extends DialogFragment {
                 return super.onCreateDialog(savedInstanceState);
             }
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder = new AlertDialog.Builder(getActivity());
+        builder.setCancelable(false);
+        if(setTitle() != null)
         builder.setTitle(setTitle());
         builder.setMessage(setMessage());
         builder.setPositiveButton(positiveText(), positiveButtonClick());
+        if(negativeButtonClick() != null)
         builder.setNegativeButton(negativeText(), negativeButtonClick());
 
         return builder.create();

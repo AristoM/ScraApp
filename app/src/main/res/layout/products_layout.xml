@@ -164,9 +164,10 @@
         android:id="@+id/confirm_cta"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/bg_checkout_button"
         app:layout_constraintBottom_toBottomOf="parent"
         android:textColor="@color/white"
+        android:enabled="false"
         android:textSize="@dimen/button_text_small"
         android:text="@string/confirm"/>
 

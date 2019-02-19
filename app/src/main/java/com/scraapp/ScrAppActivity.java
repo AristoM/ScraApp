@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,7 +18,7 @@ import com.scraapp.network.ApiClient;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.greendao.query.Query;
 
-abstract public class ScrAppActivity extends AppCompatActivity {
+abstract public class ScrAppActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private Handler mHandler;
     private ProgressDialog mDialog;
