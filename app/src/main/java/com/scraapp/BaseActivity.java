@@ -107,13 +107,17 @@ public class BaseActivity extends ClickAwareActivity {
         int id = item.getItemId();
 
         if (id == R.id.nav_my_orders) {
-            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-            android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            SettingsFragment fragment = new SettingsFragment();
-            fragmentTransaction.add(R.id.fragment_layout, fragment);
-            fragmentTransaction.commit();
+//            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+//            android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//            SettingsFragment fragment = new SettingsFragment();
+//            fragmentTransaction.add(R.id.fragment_layout, fragment);
+//            fragmentTransaction.commit();
+
+            Intent myorder = new Intent(this, MyOrdersActivity.class);
+            startActivity(myorder);
         } else if (id == R.id.nav_settings) {
-            CommonUtils.displayToast(mContext, "settings");
+            Intent settings = new Intent(this, SettingsActivity.class);
+            startActivity(settings);
         } else if (id == R.id.nav_signout) {
             signOutDialog(new SignOutDialog());
         }

@@ -35,6 +35,10 @@
 
         <activity android:name=".ProductsActivity"/>
 
+        <activity android:name=".MyOrdersActivity"/>
+
+        <activity android:name=".SettingsActivity"/>
+
     </application>
 
 </manifest>

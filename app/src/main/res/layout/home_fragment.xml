@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="@string/confirm_pickup"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorPrimaryDark"
         android:textColor="@color/white"
         android:textSize="@dimen/button_text_small"
         app:layout_constraintBottom_toBottomOf="parent"
