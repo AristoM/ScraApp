@@ -32,6 +32,7 @@
     <string name="sign_up">Sign up</string>
     <string name="not_signed_in">Not Signed user?</string>
     <string name="forget_password">Forget password</string>
+    <string name="vendor">Vendor</string>
 
     <string name="fill_mandatory_field">Fill mandatory field(s)</string>
     <string name="password_mismatch">Password Mismatch!</string>

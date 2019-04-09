@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.scraapp.network.event.ApiErrorEvent;
@@ -32,6 +33,7 @@ public class SplashActivity extends ScrAppActivity {
     LinearLayout signInLayout, signUpLayout;
     EditText mUserName, mPassword, mUserNameSignup, mPasswordSignup, mConfirmPassword, mMobileSignup, mEmailSignup;
     String sUname, sPwd;
+    ImageView mSplashLogo;
 
     public int getlayout() {
         return R.layout.splash_layout;
@@ -56,6 +58,7 @@ public class SplashActivity extends ScrAppActivity {
         mConfirmPassword = findViewById(R.id.confirm_password_signup);
         mMobileSignup = findViewById(R.id.mobile_signup);
         mEmailSignup = findViewById(R.id.email_signup);
+        mSplashLogo = findViewById(R.id.splash_logo);
 
         if(!TextUtils.isEmpty(CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME))) {
             loginProcess();
@@ -78,6 +81,7 @@ public class SplashActivity extends ScrAppActivity {
         registerCta.setOnClickListener(view -> {
                 signInLayout.setVisibility(View.INVISIBLE);
                 signUpLayout.setVisibility(View.VISIBLE);
+                mSplashLogo.setVisibility(View.GONE);
 
         });
 
@@ -109,6 +113,7 @@ public class SplashActivity extends ScrAppActivity {
         } else if(signUpLayout.getVisibility() == View.VISIBLE) {
             signInLayout.setVisibility(View.VISIBLE);
             signUpLayout.setVisibility(View.INVISIBLE);
+            mSplashLogo.setVisibility(View.VISIBLE);
         } else {
             super.onBackPressed();
         }
