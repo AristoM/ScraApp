@@ -11,9 +11,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import com.scraapp.network.event.ApiErrorEvent;
 import com.scraapp.network.event.ApiErrorWithMessageEvent;
@@ -28,12 +30,14 @@ import org.greenrobot.eventbus.Subscribe;
 
 public class SplashActivity extends ScrAppActivity {
 
-    Button loginCta, signupCta;
+    Button loginCta, signupCta, signupVendorCta;
     TextView registerCta;
-    LinearLayout signInLayout, signUpLayout;
+    LinearLayout signInLayout, signUpLayout, signUpLayoutVendor;
     EditText mUserName, mPassword, mUserNameSignup, mPasswordSignup, mConfirmPassword, mMobileSignup, mEmailSignup;
     String sUname, sPwd;
     ImageView mSplashLogo;
+    Switch mUserTypeToggle;
+    boolean mIsUserType;
 
     public int getlayout() {
         return R.layout.splash_layout;
@@ -48,9 +52,10 @@ public class SplashActivity extends ScrAppActivity {
 
         loginCta = findViewById(R.id.login_cta);
         signupCta = findViewById(R.id.signup_cta);
-        registerCta = findViewById(R.id.not_signed_user_cta);
+        registerCta = findViewById(R.id.new_customer_cta);
         signInLayout = findViewById(R.id.signin_layout);
         signUpLayout = findViewById(R.id.signup_layout);
+        signUpLayoutVendor = findViewById(R.id.signup_layout_vendor);
         mUserName = findViewById(R.id.user_name);
         mPassword = findViewById(R.id.password);
         mUserNameSignup = findViewById(R.id.user_name_signup);
@@ -59,6 +64,8 @@ public class SplashActivity extends ScrAppActivity {
         mMobileSignup = findViewById(R.id.mobile_signup);
         mEmailSignup = findViewById(R.id.email_signup);
         mSplashLogo = findViewById(R.id.splash_logo);
+        mUserTypeToggle = findViewById(R.id.switch_user_type);
+        signupVendorCta = findViewById(R.id.signup_cta_vendor);
 
         if(!TextUtils.isEmpty(CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME))) {
             loginProcess();
@@ -80,8 +87,14 @@ public class SplashActivity extends ScrAppActivity {
 
         registerCta.setOnClickListener(view -> {
                 signInLayout.setVisibility(View.INVISIBLE);
-                signUpLayout.setVisibility(View.VISIBLE);
+
                 mSplashLogo.setVisibility(View.GONE);
+
+                if(mIsUserType) {
+                    signUpLayoutVendor.setVisibility(View.VISIBLE);
+                } else {
+                    signUpLayout.setVisibility(View.VISIBLE);
+                }
 
         });
 
@@ -100,6 +113,29 @@ public class SplashActivity extends ScrAppActivity {
             }
         });
 
+        signupVendorCta.setOnClickListener(view -> {
+
+            Intent intent = new Intent(SplashActivity.this, BaseActivity.class);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            startActivity(intent);
+            finish();
+        });
+
+
+        mUserTypeToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+
+                mIsUserType = isChecked;
+                if (isChecked) {
+                    registerCta.setText(getString(R.string.new_vendor));
+                } else {
+                    registerCta.setText(getString(R.string.new_customer));
+                }
+
+            }
+        });
+
         initDialog(getContext());
 
     }
@@ -110,9 +146,10 @@ public class SplashActivity extends ScrAppActivity {
 
         if(signInLayout.getVisibility() == View.VISIBLE) {
             finish();
-        } else if(signUpLayout.getVisibility() == View.VISIBLE) {
+        } else if(signUpLayout.getVisibility() == View.VISIBLE || signUpLayoutVendor.getVisibility() == View.VISIBLE) {
             signInLayout.setVisibility(View.VISIBLE);
             signUpLayout.setVisibility(View.INVISIBLE);
+            signUpLayoutVendor.setVisibility(View.INVISIBLE);
             mSplashLogo.setVisibility(View.VISIBLE);
         } else {
             super.onBackPressed();

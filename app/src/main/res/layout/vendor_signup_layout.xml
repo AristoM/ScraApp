@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
-        android:id="@+id/signup_layout"
+        android:id="@+id/signup_layout_vendor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -15,23 +15,34 @@
         <com.scraapp.utility.ScraAppTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/new_customer_registration"
+            android:text="@string/new_vendor_registration"
             android:gravity="center"
             android:layout_marginBottom="@dimen/button_text_small"
             android:textColor="@color/white"/>
 
         <com.scraapp.utility.ScraAppEdittext
-            android:id="@+id/user_name_signup"
+            android:id="@+id/shop_name"
             android:layout_width="match_parent"
             android:layout_height="49dp"
             android:background="@drawable/et_login_bg"
             android:hint="@string/user_name"
             android:padding="@dimen/padding_medium"
             android:singleLine="true"
-            android:text="aristo"/>
+            android:text="VR and Brothers"/>
 
         <com.scraapp.utility.ScraAppEdittext
-            android:id="@+id/email_signup"
+            android:id="@+id/shop_addresss"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="@drawable/et_login_bg"
+            android:layout_marginTop="@dimen/padding_small"
+            android:hint="@string/address"
+            android:padding="@dimen/padding_medium"
+            android:singleLine="true"
+            android:text="20, mohammed hussain st, Chennai"/>
+
+        <com.scraapp.utility.ScraAppEdittext
+            android:id="@+id/email_signup_vendor"
             android:layout_width="match_parent"
             android:layout_height="49dp"
             android:background="@drawable/et_login_bg"
@@ -43,7 +54,7 @@
             android:singleLine="true"/>
 
         <com.scraapp.utility.ScraAppEdittext
-            android:id="@+id/mobile_signup"
+            android:id="@+id/mobile_signup_vendor"
             android:layout_width="match_parent"
             android:layout_height="49dp"
             android:background="@drawable/et_login_bg"
@@ -56,7 +67,33 @@
             android:singleLine="true"/>
 
         <com.scraapp.utility.ScraAppEdittext
-            android:id="@+id/password_signup"
+            android:id="@+id/pan_number"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="@drawable/et_login_bg"
+            android:layout_marginTop="@dimen/padding_small"
+            android:hint="@string/adhar_number"
+            android:padding="@dimen/padding_medium"
+            android:text=""
+            android:maxLength="10"
+            android:inputType="text"
+            android:singleLine="true"/>
+
+        <com.scraapp.utility.ScraAppEdittext
+            android:id="@+id/adhar_number"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="@drawable/et_login_bg"
+            android:layout_marginTop="@dimen/padding_small"
+            android:hint="@string/pan_number"
+            android:padding="@dimen/padding_medium"
+            android:text=""
+            android:maxLength="10"
+            android:inputType="text"
+            android:singleLine="true"/>
+
+        <com.scraapp.utility.ScraAppEdittext
+            android:id="@+id/password_signup_vendor"
             android:layout_width="match_parent"
             android:layout_height="49dp"
             android:background="@drawable/et_login_bg"
@@ -68,7 +105,7 @@
             android:singleLine="true"/>
 
         <com.scraapp.utility.ScraAppEdittext
-            android:id="@+id/confirm_password_signup"
+            android:id="@+id/confirm_password_signup_vendor"
             android:layout_width="match_parent"
             android:layout_height="49dp"
             android:background="@drawable/et_login_bg"
@@ -80,7 +117,7 @@
             android:singleLine="true"/>
 
         <com.scraapp.utility.ScraAppButton
-            android:id="@+id/signup_cta"
+            android:id="@+id/signup_cta_vendor"
             android:layout_width="match_parent"
             android:layout_height="49dp"
             android:layout_marginTop="@dimen/padding_xmedium"
