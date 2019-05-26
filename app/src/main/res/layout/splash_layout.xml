@@ -10,9 +10,10 @@
         android:layout_height="150dp"
         android:layout_marginBottom="@dimen/padding_xxxlarge"
         android:gravity="center"
-        android:src="@drawable/splash_icon"
+        android:src="@drawable/splash_img"
         android:layout_above="@+id/signin_include_layout"/>
 
+    <!--Sign in layout-->
     <include android:id="@+id/signin_include_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,6 +22,7 @@
         android:visibility="visible"
         layout="@layout/signin_layout"/>
 
+    <!--Customer sign up layout-->
     <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,6 +31,7 @@
         android:visibility="visible"
         layout="@layout/register_layout"/>
 
+    <!--Vendor sign up layout-->
     <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

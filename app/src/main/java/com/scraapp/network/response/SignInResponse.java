@@ -3,8 +3,6 @@ package com.scraapp.network.response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
-
 public class SignInResponse extends AbstractApiResponse {
 
     @SerializedName("result")
@@ -35,6 +33,8 @@ public class SignInResponse extends AbstractApiResponse {
         String email_id;
         @SerializedName("mobile_no")
         String mobile_no;
+        @SerializedName("user_type")
+        String userType;
 
         public String getId() {
             return id;
@@ -66,6 +66,14 @@ public class SignInResponse extends AbstractApiResponse {
 
         public void setMobile_no(String mobile_no) {
             this.mobile_no = mobile_no;
+        }
+
+        public String getUserType() {
+            return userType;
+        }
+
+        public void setUserType(String userType) {
+            this.userType = userType;
         }
     }
 

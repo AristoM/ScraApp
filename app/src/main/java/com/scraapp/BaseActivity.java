@@ -21,11 +21,12 @@ import android.widget.LinearLayout;
 
 import com.scraapp.dialog.SignOutDialog;
 import com.scraapp.dialog.YesAndNoDialog;
-import com.scraapp.frgments.SettingsFragment;
+import com.scraapp.frgments.BaseFragment;
+import com.scraapp.mediators.BaseMediator;
 import com.scraapp.utility.Constant;
 import com.scraapp.utility.CustomTypefaceSpan;
 
-public class BaseActivity extends ClickAwareActivity {
+public class BaseActivity extends ClickAwareActivity implements BaseMediator {
 
     private static Context instance;
     LinearLayout parentLayout;
@@ -33,10 +34,11 @@ public class BaseActivity extends ClickAwareActivity {
     protected NavigationView navView;
     private DrawerLayout mDrawerLayout;
 
+    BaseMediator baseMediator;
 
-    public Context getInstance() {
+    public static Context getInstance() {
         if(instance == null) {
-            instance = BaseActivity.this;
+            instance = new BaseActivity();
         }
         return instance;
     }
@@ -53,6 +55,8 @@ public class BaseActivity extends ClickAwareActivity {
 //        setContentView(R.layout.home_activity_test);
 
         parentLayout = findViewById(R.id.parent_layout);
+
+        baseMediator = this;
 
         HomeFragment homeFragment = new HomeFragment();
         commitFragment(homeFragment);
@@ -142,11 +146,11 @@ public class BaseActivity extends ClickAwareActivity {
     }
 
     public void signOut() {
-        SharedPreferences preferences = getSharedPreferences(Constant.SP_FILE_LOGIN, 0);
+        SharedPreferences preferences = mContext.getSharedPreferences(Constant.SP_FILE_LOGIN, 0);
         preferences.edit().remove(Constant.SP_USER_NAME).apply();
         preferences.edit().remove(Constant.SP_PASSWORD).apply();
 
-        Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+        Intent intent = new Intent(mContext, SplashActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
 
@@ -163,5 +167,16 @@ public class BaseActivity extends ClickAwareActivity {
             super.onBackPressed();
         }
 
+    }
+
+    @Override
+    public void commitFragment(BaseFragment baseFragment) {
+
+    }
+
+    @Override
+    public void handleLogout() {
+        signOut();
+//        Toast.makeText(mContext, "welcome", Toast.LENGTH_SHORT).show();
     }
 }

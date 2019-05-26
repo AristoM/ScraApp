@@ -1,14 +1,19 @@
 package com.scraapp.dialog;
 
-import android.Manifest;
 import android.content.DialogInterface;
-import android.support.v4.app.ActivityCompat;
 
+import com.scraapp.BaseActivity;
 import com.scraapp.R;
+import com.scraapp.mediators.BaseMediator;
 
 public class SignOutDialog extends YesAndNoDialog {
 
     public static int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 99;
+    BaseMediator baseMediator;
+
+    public SignOutDialog() {
+        baseMediator = (BaseMediator) BaseActivity.getInstance();
+    }
 
     @Override
     public String setTitle() {
@@ -33,7 +38,10 @@ public class SignOutDialog extends YesAndNoDialog {
     @Override
     public DialogInterface.OnClickListener positiveButtonClick() {
 
-        return (dialogInterface, i) -> dismiss();
+        return (dialogInterface, i) -> {
+            dismiss();
+            baseMediator.handleLogout();
+        };
     }
 
     @Override

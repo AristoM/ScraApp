@@ -7,8 +7,6 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.scraapp.greendao.Categories;
 import com.scraapp.greendao.CategoriesDao;
@@ -26,7 +24,7 @@ abstract public class ScrAppActivity extends AppCompatActivity implements Naviga
     protected EventBus mEventBus;
     protected ApiClient mApiClient;
 
-    protected Context mContext;
+    protected static Context mContext;
 
     protected CategoriesDao categoriesDao;
     protected Query<Categories> categoriesQuery;

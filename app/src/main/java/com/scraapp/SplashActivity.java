@@ -1,5 +1,7 @@
 package com.scraapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,11 +13,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import com.scraapp.network.event.ApiErrorEvent;
 import com.scraapp.network.event.ApiErrorWithMessageEvent;
@@ -30,14 +30,13 @@ import org.greenrobot.eventbus.Subscribe;
 
 public class SplashActivity extends ScrAppActivity {
 
-    Button loginCta, signupCta, signupVendorCta;
-    TextView registerCta;
-    LinearLayout signInLayout, signUpLayout, signUpLayoutVendor;
+    Button loginCta, signupCustomerCta, signupVendorCta;
+    TextView newUser;
+    LinearLayout signInLayout, signUpLayoutCustomer, signUpLayoutVendor;
     EditText mUserName, mPassword, mUserNameSignup, mPasswordSignup, mConfirmPassword, mMobileSignup, mEmailSignup;
+    EditText mShopName, mShopAddress, mEmailSignupVendor, mMobileSignupVendor, mPanNumber, mAdharCard, mPasswordSignupVendor, mConfirmPasswordVendor;
     String sUname, sPwd;
     ImageView mSplashLogo;
-    Switch mUserTypeToggle;
-    boolean mIsUserType;
 
     public int getlayout() {
         return R.layout.splash_layout;
@@ -51,10 +50,10 @@ public class SplashActivity extends ScrAppActivity {
         super.onCreate(savedInstanceState);
 
         loginCta = findViewById(R.id.login_cta);
-        signupCta = findViewById(R.id.signup_cta);
-        registerCta = findViewById(R.id.new_customer_cta);
+        signupCustomerCta = findViewById(R.id.signup_cta);
+        newUser = findViewById(R.id.new_customer_cta);
         signInLayout = findViewById(R.id.signin_layout);
-        signUpLayout = findViewById(R.id.signup_layout);
+        signUpLayoutCustomer = findViewById(R.id.signup_layout);
         signUpLayoutVendor = findViewById(R.id.signup_layout_vendor);
         mUserName = findViewById(R.id.user_name);
         mPassword = findViewById(R.id.password);
@@ -64,46 +63,106 @@ public class SplashActivity extends ScrAppActivity {
         mMobileSignup = findViewById(R.id.mobile_signup);
         mEmailSignup = findViewById(R.id.email_signup);
         mSplashLogo = findViewById(R.id.splash_logo);
-        mUserTypeToggle = findViewById(R.id.switch_user_type);
         signupVendorCta = findViewById(R.id.signup_cta_vendor);
 
+        // Vendor Registration
+        mShopName = findViewById(R.id.shop_name);
+        mShopAddress = findViewById(R.id.shop_addresss);
+        mEmailSignupVendor = findViewById(R.id.email_signup_vendor);
+        mMobileSignupVendor = findViewById(R.id.mobile_signup_vendor);
+        mPanNumber = findViewById(R.id.pan_number);
+        mAdharCard = findViewById(R.id.adhar_number);
+        mPasswordSignupVendor = findViewById(R.id.password_signup_vendor);
+        mConfirmPasswordVendor = findViewById(R.id.confirm_password_signup_vendor);
+
+
         if(!TextUtils.isEmpty(CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME))) {
-            loginProcess();
+            String type = CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_TYPE);
+            loginProcess(type);
         } else {
             signInLayout.setVisibility(View.VISIBLE);
-            signUpLayout.setVisibility(View.INVISIBLE);
+            signUpLayoutCustomer.setVisibility(View.INVISIBLE);
         }
 
         loginCta.setOnClickListener(view -> {
 
-            if(validation(ActionRequest.LOGIN)) {
-                sUname = mUserName.getText().toString();
-                sPwd = mPassword.getText().toString();
-                loginProcess();
-            } else {
-                CommonUtils.displayToast(getContext(), getString(R.string.fill_mandatory_field));
-            }
-        });
+            CharSequence options[] = new CharSequence[] {"Are you a Customer?", "Are you a Vendor?"};
 
-        registerCta.setOnClickListener(view -> {
-                signInLayout.setVisibility(View.INVISIBLE);
-
-                mSplashLogo.setVisibility(View.GONE);
-
-                if(mIsUserType) {
-                    signUpLayoutVendor.setVisibility(View.VISIBLE);
-                } else {
-                    signUpLayout.setVisibility(View.VISIBLE);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCancelable(true);
+//            builder.setTitle("Select your option:");
+            builder.setItems(options, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int pos) {
+                    // the user clicked on options[which]
+                    if(pos == 0) {
+                        CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_TYPE, "login");
+                        if(validation(ActionRequest.LOGIN)) {
+                            sUname = mUserName.getText().toString();
+                            sPwd = mPassword.getText().toString();
+                            loginProcess(ActionRequest.LOGIN);
+                        } else {
+                            CommonUtils.displayToast(getContext(), getString(R.string.fill_mandatory_field));
+                        }
+                    } else {
+                        CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_TYPE, "vendor_login");
+                        if(validation(ActionRequest.LOGIN)) {
+                            sUname = mUserName.getText().toString();
+                            sPwd = mPassword.getText().toString();
+                            loginProcess(ActionRequest.LOGIN_VENDOR);
+                        } else {
+                            CommonUtils.displayToast(getContext(), getString(R.string.fill_mandatory_field));
+                        }
+                    }
                 }
+            });
+//            builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    //the user clicked on Cancel
+//                }
+//            });
+            builder.show();
 
         });
 
-        signupCta.setOnClickListener(view -> {
+        newUser.setOnClickListener(view -> {
 
-            if(validation(ActionRequest.REGISTER)) {
+            CharSequence options[] = new CharSequence[] {"Are you a Customer?", "Are you a Vendor?"};
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCancelable(true);
+//            builder.setTitle("Select your option:");
+            builder.setItems(options, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int pos) {
+                    // the user clicked on options[which]
+                    if(pos == 0) {
+                        signInLayout.setVisibility(View.INVISIBLE);
+                        mSplashLogo.setVisibility(View.GONE);
+                        signUpLayoutCustomer.setVisibility(View.VISIBLE);
+                    } else {
+                        signInLayout.setVisibility(View.INVISIBLE);
+                        mSplashLogo.setVisibility(View.GONE);
+                        signUpLayoutCustomer.setVisibility(View.GONE);
+                        signUpLayoutVendor.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+            builder.show();
+
+
+
+
+        });
+
+
+        signupCustomerCta.setOnClickListener(view -> {
+
+            if(validation(ActionRequest.REGISTER_CUSTOMER)) {
                 if (!mApiClient.isRequestRunning(Constant.SIGNIN_REQUEST_TAG)) {
                     showProgress();
-                    SignupRequestParam signupRequestParam = new SignupRequestParam(ActionRequest.REGISTER, mUserNameSignup.getText().toString(),
+                    SignupRequestParam signupRequestParam = new SignupRequestParam(ActionRequest.REGISTER_CUSTOMER, mUserNameSignup.getText().toString(),
                             mEmailSignup.getText().toString(), mPasswordSignup.getText().toString(),
                             mMobileSignup.getText().toString(), null, Constant.SIGNUP_REQUEST_TAG);
                     mApiClient.signUpRequest(signupRequestParam);
@@ -115,26 +174,25 @@ public class SplashActivity extends ScrAppActivity {
 
         signupVendorCta.setOnClickListener(view -> {
 
-            Intent intent = new Intent(SplashActivity.this, BaseActivity.class);
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-            startActivity(intent);
-            finish();
-        });
+            if(validation(ActionRequest.REGISTER_VENDOR)) {
+//                Intent intent = new Intent(SplashActivity.this, BaseActivity.class);
+//                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+//                startActivity(intent);
+//                finish();
 
-
-        mUserTypeToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-
-                mIsUserType = isChecked;
-                if (isChecked) {
-                    registerCta.setText(getString(R.string.new_vendor));
-                } else {
-                    registerCta.setText(getString(R.string.new_customer));
+                if (!mApiClient.isRequestRunning(Constant.SIGNIN_REQUEST_TAG)) {
+                    showProgress();
+                    SignupRequestParam signupRequestParam = new SignupRequestParam(ActionRequest.REGISTER_CUSTOMER, mUserNameSignup.getText().toString(),
+                            mEmailSignup.getText().toString(), mPasswordSignup.getText().toString(),
+                            mMobileSignup.getText().toString(), null, Constant.SIGNUP_REQUEST_TAG);
+                    mApiClient.signUpRequest(signupRequestParam);
                 }
-
+            } else {
+                CommonUtils.displayToast(getContext(), getString(R.string.fill_mandatory_field));
             }
+
         });
+
 
         initDialog(getContext());
 
@@ -146,9 +204,9 @@ public class SplashActivity extends ScrAppActivity {
 
         if(signInLayout.getVisibility() == View.VISIBLE) {
             finish();
-        } else if(signUpLayout.getVisibility() == View.VISIBLE || signUpLayoutVendor.getVisibility() == View.VISIBLE) {
+        } else if(signUpLayoutCustomer.getVisibility() == View.VISIBLE || signUpLayoutVendor.getVisibility() == View.VISIBLE) {
             signInLayout.setVisibility(View.VISIBLE);
-            signUpLayout.setVisibility(View.INVISIBLE);
+            signUpLayoutCustomer.setVisibility(View.INVISIBLE);
             signUpLayoutVendor.setVisibility(View.INVISIBLE);
             mSplashLogo.setVisibility(View.VISIBLE);
         } else {
@@ -171,7 +229,7 @@ public class SplashActivity extends ScrAppActivity {
             if (!CommonUtils.textValidation(mPassword)) {
                 mPassword.setError(null);
             }
-        } else if(action.equalsIgnoreCase(ActionRequest.REGISTER)) {
+        } else if(action.equalsIgnoreCase(ActionRequest.REGISTER_CUSTOMER)) {
             if(CommonUtils.textValidation(mUserNameSignup) && CommonUtils.textValidation(mPasswordSignup) && CommonUtils.textValidation(mConfirmPassword)
                     && CommonUtils.textValidation(mMobileSignup) && CommonUtils.textValidation(mEmailSignup)) {
                 if(CommonUtils.textCompare(mPasswordSignup, mConfirmPassword)) {
@@ -199,6 +257,50 @@ public class SplashActivity extends ScrAppActivity {
 
             if(!CommonUtils.textValidation(mEmailSignup)) {
                 mEmailSignup.setError(null);
+            }
+
+        } else if(action.equalsIgnoreCase(ActionRequest.REGISTER_VENDOR)) {
+            if(CommonUtils.textValidation(mShopName) && CommonUtils.textValidation(mShopAddress) && CommonUtils.textValidation(mEmailSignupVendor)
+                    && CommonUtils.textValidation(mMobileSignupVendor) && CommonUtils.textValidation(mPanNumber) && CommonUtils.textValidation(mAdharCard)
+                    && CommonUtils.textValidation(mPasswordSignupVendor) && CommonUtils.textValidation(mConfirmPasswordVendor)) {
+
+                if(CommonUtils.textCompare(mPasswordSignupVendor, mConfirmPasswordVendor)) {
+                    return true;
+                } else {
+                    CommonUtils.displayToast(this, getString(R.string.password_mismatch));
+                }
+            }
+
+            if(!CommonUtils.textValidation(mShopName)) {
+                mShopName.setError("");
+            }
+
+            if(!CommonUtils.textValidation(mShopAddress)) {
+                mShopAddress.setError("");
+            }
+
+            if(!CommonUtils.textValidation(mEmailSignupVendor)) {
+                mEmailSignupVendor.setError("");
+            }
+
+            if(!CommonUtils.textValidation(mMobileSignupVendor)) {
+                mMobileSignupVendor.setError("");
+            }
+
+            if(!CommonUtils.textValidation(mPanNumber)) {
+                mPanNumber.setError("");
+            }
+
+            if(!CommonUtils.textValidation(mAdharCard)) {
+                mAdharCard.setError("");
+            }
+
+            if(!CommonUtils.textValidation(mPasswordSignupVendor)) {
+                mPasswordSignupVendor.setError("");
+            }
+
+            if(!CommonUtils.textValidation(mConfirmPasswordVendor)) {
+                mConfirmPasswordVendor.setError("");
             }
 
         }
@@ -241,6 +343,7 @@ public class SplashActivity extends ScrAppActivity {
                     SignInResponse signInResponse = (SignInResponse) apiResponse;
                     CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME, sUname);
                     CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_PASSWORD, sPwd);
+                    CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_TYPE, signInResponse.getResult().getUser().getUserType());
                     CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USERID, ((SignInResponse) apiResponse).getResult().getUser().getId());
                 }
 
@@ -255,7 +358,7 @@ public class SplashActivity extends ScrAppActivity {
 
                 CommonUtils.displayToast(getContext(), apiResponse.getMessage());
                 signInLayout.setVisibility(View.VISIBLE);
-                signUpLayout.setVisibility(View.INVISIBLE);
+                signUpLayoutCustomer.setVisibility(View.INVISIBLE);
 
                 break;
 
@@ -314,10 +417,10 @@ public class SplashActivity extends ScrAppActivity {
         }
     }
 
-    void loginProcess() {
+    void loginProcess(String action) {
         if (!mApiClient.isRequestRunning(Constant.SIGNIN_REQUEST_TAG)) {
             showProgress();
-            LoginRequestParam loginRequestParam = new LoginRequestParam(ActionRequest.LOGIN, mUserName.getText().toString(), mPassword.getText().toString()
+            LoginRequestParam loginRequestParam = new LoginRequestParam(action, mUserName.getText().toString(), mPassword.getText().toString()
                     , null, Constant.SIGNIN_REQUEST_TAG);
             mApiClient.signInRequest(loginRequestParam);
         }

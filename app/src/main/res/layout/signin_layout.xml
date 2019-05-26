@@ -47,7 +47,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/new_customer"
+                android:text="@string/new_user"
                 android:layout_marginTop="@dimen/padding_small"
                 android:textColor="@color/white"
                 android:textSize="@dimen/button_text_xxsmall" />
@@ -62,31 +62,6 @@
                 android:layout_marginTop="@dimen/padding_small"
                 android:textColor="@color/white"
                 android:textSize="@dimen/button_text_xxsmall" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/padding_xsmall"
-            android:layout_gravity="end"
-            android:gravity="center">
-
-            <com.scraapp.utility.ScraAppTextView
-                android:id="@+id/switch_lable"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/vendor"
-                android:layout_marginEnd="@dimen/padding_small"
-                android:textColor="@color/white"
-                android:textSize="@dimen/button_text_xxsmall" />
-
-            <Switch
-                android:id="@+id/switch_user_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"/>
 
         </LinearLayout>
 

@@ -3,13 +3,11 @@ package com.scraapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.scraapp.frgments.BaseFragment;
 import com.scraapp.frgments.SettingsFragment;
@@ -66,6 +64,11 @@ public class HomeActivity extends BaseApp implements BaseMediator {
     @Override
     public void commitFragment(BaseFragment baseFragment) {
 
+
+    }
+
+    @Override
+    public void handleLogout() {
 
     }
 

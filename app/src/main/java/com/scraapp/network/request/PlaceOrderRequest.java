@@ -1,9 +1,7 @@
 package com.scraapp.network.request;
 
-import com.google.android.gms.awareness.snapshot.PlacesResponse;
 import com.scraapp.R;
 import com.scraapp.network.ApiService;
-import com.scraapp.network.response.AbstractApiResponse;
 import com.scraapp.network.response.ApiCallback;
 import com.scraapp.network.response.PlaceOrderResponse;
 
