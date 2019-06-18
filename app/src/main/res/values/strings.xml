@@ -32,6 +32,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
+    <string name="next">Next</string>
     <string name="new_customer">New customer?</string>
     <string name="new_vendor">New Vendor?</string>
     <string name="new_user">New User?</string>

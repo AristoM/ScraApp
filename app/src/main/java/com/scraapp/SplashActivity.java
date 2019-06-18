@@ -1,11 +1,14 @@
 package com.scraapp;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -17,6 +20,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
 import com.scraapp.network.event.ApiErrorEvent;
 import com.scraapp.network.event.ApiErrorWithMessageEvent;
 import com.scraapp.network.request.LoginRequestParam;
@@ -29,6 +41,8 @@ import com.scraapp.utility.Constant;
 import org.greenrobot.eventbus.Subscribe;
 
 public class SplashActivity extends ScrAppActivity {
+
+    protected static final int REQUEST_CODE_AUTOCOMPLETE = 1;
 
     Button loginCta, signupCustomerCta, signupVendorCta;
     TextView newUser;
@@ -75,14 +89,34 @@ public class SplashActivity extends ScrAppActivity {
         mPasswordSignupVendor = findViewById(R.id.password_signup_vendor);
         mConfirmPasswordVendor = findViewById(R.id.confirm_password_signup_vendor);
 
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null) {
+            boolean isFromSignout = bundle.getBoolean(Constant.IS_FROM_SIGNOUT);
+            if(isFromSignout) {
+                signInLayout.setVisibility(View.VISIBLE);
+                signUpLayoutCustomer.setVisibility(View.INVISIBLE);
+                signUpLayoutVendor.setVisibility(View.INVISIBLE);
+            }
+        }
+
 
         if(!TextUtils.isEmpty(CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME))) {
             String type = CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_TYPE);
             loginProcess(type);
         } else {
             signInLayout.setVisibility(View.VISIBLE);
-            signUpLayoutCustomer.setVisibility(View.INVISIBLE);
+            signUpLayoutCustomer.setVisibility(View.GONE);
+            signUpLayoutVendor.setVisibility(View.GONE);
         }
+
+        mShopAddress.setFocusable(false);
+        mShopAddress.setClickable(true);
+        mShopAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openAutocompleteActivity();
+            }
+        });
 
         loginCta.setOnClickListener(view -> {
 
@@ -174,7 +208,7 @@ public class SplashActivity extends ScrAppActivity {
 
         signupVendorCta.setOnClickListener(view -> {
 
-            if(validation(ActionRequest.REGISTER_VENDOR)) {
+            if(validation(ActionRequest.VENDOR_REGISTER)) {
 //                Intent intent = new Intent(SplashActivity.this, BaseActivity.class);
 //                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 //                startActivity(intent);
@@ -182,7 +216,7 @@ public class SplashActivity extends ScrAppActivity {
 
                 if (!mApiClient.isRequestRunning(Constant.SIGNIN_REQUEST_TAG)) {
                     showProgress();
-                    SignupRequestParam signupRequestParam = new SignupRequestParam(ActionRequest.REGISTER_CUSTOMER, mUserNameSignup.getText().toString(),
+                    SignupRequestParam signupRequestParam = new SignupRequestParam(ActionRequest.VENDOR_REGISTER, mUserNameSignup.getText().toString(),
                             mEmailSignup.getText().toString(), mPasswordSignup.getText().toString(),
                             mMobileSignup.getText().toString(), null, Constant.SIGNUP_REQUEST_TAG);
                     mApiClient.signUpRequest(signupRequestParam);
@@ -259,7 +293,7 @@ public class SplashActivity extends ScrAppActivity {
                 mEmailSignup.setError(null);
             }
 
-        } else if(action.equalsIgnoreCase(ActionRequest.REGISTER_VENDOR)) {
+        } else if(action.equalsIgnoreCase(ActionRequest.VENDOR_REGISTER)) {
             if(CommonUtils.textValidation(mShopName) && CommonUtils.textValidation(mShopAddress) && CommonUtils.textValidation(mEmailSignupVendor)
                     && CommonUtils.textValidation(mMobileSignupVendor) && CommonUtils.textValidation(mPanNumber) && CommonUtils.textValidation(mAdharCard)
                     && CommonUtils.textValidation(mPasswordSignupVendor) && CommonUtils.textValidation(mConfirmPasswordVendor)) {
@@ -405,6 +439,8 @@ public class SplashActivity extends ScrAppActivity {
             case Constant.SIGNIN_REQUEST_TAG:
                 dismissProgress();
                 CommonUtils.displayToast(getContext(), event.getResultMsgUser());
+                signInLayout.setVisibility(View.VISIBLE);
+                signUpLayoutCustomer.setVisibility(View.INVISIBLE);
                 break;
 
             case Constant.SIGNUP_REQUEST_TAG:
@@ -429,5 +465,67 @@ public class SplashActivity extends ScrAppActivity {
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         return false;
+    }
+
+    private void openAutocompleteActivity() {
+        try {
+            // The autocomplete activity requires Google Play Services to be available. The intent
+            // builder checks this and throws an exception if it is not the case.
+            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                    .build(this);
+            startActivityForResult(intent, REQUEST_CODE_AUTOCOMPLETE);
+        } catch (GooglePlayServicesRepairableException e) {
+            // Indicates that Google Play Services is either not installed or not up to date. Prompt
+            // the user to correct the issue.
+            GoogleApiAvailability.getInstance().getErrorDialog(this, e.getConnectionStatusCode(),
+                    0 /* requestCode */).show();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            // Indicates that Google Play Services is not available and the problem is not easily
+            // resolvable.
+            String message = "Google Play Services is not available: " +
+                    GoogleApiAvailability.getInstance().getErrorString(e.errorCode);
+
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Check that the result was from the autocomplete widget.
+        if (requestCode == REQUEST_CODE_AUTOCOMPLETE) {
+            if (resultCode == RESULT_OK) {
+                autoCompleteCallback(data);
+            }
+        }
+    }
+
+//    @Override
+    public void autoCompleteCallback(Intent data) {
+
+        // Get the user's selected place from the Intent.
+        Place place = PlaceAutocomplete.getPlace(this, data);
+
+        // TODO call location based filter
+
+        LatLng latLong = place.getLatLng();
+
+        mShopAddress.setText(place.getName() + "");
+
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(latLong).zoom(19f).tilt(70).build();
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
     }
 }

@@ -34,7 +34,6 @@ public class BaseActivity extends ClickAwareActivity implements BaseMediator {
     protected NavigationView navView;
     private DrawerLayout mDrawerLayout;
 
-    BaseMediator baseMediator;
 
     public static Context getInstance() {
         if(instance == null) {
@@ -81,10 +80,9 @@ public class BaseActivity extends ClickAwareActivity implements BaseMediator {
             applyFontToMenuItem(mi);
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+                this, mDrawerLayout, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         navView.setNavigationItemSelectedListener(this);
@@ -123,7 +121,9 @@ public class BaseActivity extends ClickAwareActivity implements BaseMediator {
             Intent settings = new Intent(this, SettingsActivity.class);
             startActivity(settings);
         } else if (id == R.id.nav_signout) {
-            signOutDialog(new SignOutDialog());
+            SignOutDialog signOutDialog = new SignOutDialog();
+            signOutDialog.setListener(BaseActivity.this);
+            signOutDialog(signOutDialog);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -152,6 +152,7 @@ public class BaseActivity extends ClickAwareActivity implements BaseMediator {
 
         Intent intent = new Intent(mContext, SplashActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(Constant.IS_FROM_SIGNOUT, true);
         startActivity(intent);
 
         CommonUtils.displayToast(mContext, "Signed out");
@@ -166,6 +167,12 @@ public class BaseActivity extends ClickAwareActivity implements BaseMediator {
         } else {
             super.onBackPressed();
         }
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
 
     }
 

@@ -2,7 +2,6 @@ package com.scraapp.dialog;
 
 import android.content.DialogInterface;
 
-import com.scraapp.BaseActivity;
 import com.scraapp.R;
 import com.scraapp.mediators.BaseMediator;
 
@@ -12,7 +11,7 @@ public class SignOutDialog extends YesAndNoDialog {
     BaseMediator baseMediator;
 
     public SignOutDialog() {
-        baseMediator = (BaseMediator) BaseActivity.getInstance();
+//        baseMediator = (BaseMediator) BaseActivity.getInstance();
     }
 
     @Override
@@ -33,6 +32,10 @@ public class SignOutDialog extends YesAndNoDialog {
     @Override
     public String negativeText() {
         return getString(R.string.cancel);
+    }
+
+    public void setListener(BaseMediator listener) {
+        baseMediator = listener;
     }
 
     @Override

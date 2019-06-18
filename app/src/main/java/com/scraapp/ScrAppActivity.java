@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.scraapp.greendao.Categories;
 import com.scraapp.greendao.CategoriesDao;
 import com.scraapp.greendao.DaoSession;
+import com.scraapp.mediators.BaseMediator;
 import com.scraapp.network.ApiClient;
 
 import org.greenrobot.eventbus.EventBus;
@@ -25,6 +26,8 @@ abstract public class ScrAppActivity extends AppCompatActivity implements Naviga
     protected ApiClient mApiClient;
 
     protected static Context mContext;
+
+    protected BaseMediator baseMediator;
 
     protected CategoriesDao categoriesDao;
     protected Query<Categories> categoriesQuery;
@@ -74,6 +77,8 @@ abstract public class ScrAppActivity extends AppCompatActivity implements Naviga
     protected void onStop() {
         super.onStop();
 //        EventBus.getDefault().unregister(this);
+
+        baseMediator = null;
     }
 
     @Override
