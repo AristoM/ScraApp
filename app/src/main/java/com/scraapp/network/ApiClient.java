@@ -9,12 +9,16 @@ import com.scraapp.network.event.RequestFinishedEvent;
 import com.scraapp.network.request.AbstractApiRequest;
 import com.scraapp.network.request.GetAllCategoryRequest;
 import com.scraapp.network.request.GetCategoriesRequestParam;
+import com.scraapp.network.request.GetOrdersRequest;
+import com.scraapp.network.request.GetOrdersRequestParam;
 import com.scraapp.network.request.LoginRequestParam;
 import com.scraapp.network.request.PlaceOrderRequest;
 import com.scraapp.network.request.PlaceOrderRequestParam;
 import com.scraapp.network.request.SignInApiRequest;
 import com.scraapp.network.request.SignUpRequest;
+import com.scraapp.network.request.SignUpVendorRequest;
 import com.scraapp.network.request.SignupRequestParam;
+import com.scraapp.network.request.SignupVendorRequestParam;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -136,6 +140,18 @@ public class ApiClient {
 
     public void signUpRequest(SignupRequestParam signupRequestParam) {
         SignUpRequest request = new SignUpRequest(mApiService, signupRequestParam);
+        requests.put(signupRequestParam.getmRequestTag(), request);
+        request.execute();
+    }
+
+    public void getOrdersRequest(GetOrdersRequestParam getOrdersRequestParam) {
+        GetOrdersRequest request = new GetOrdersRequest(mApiService, getOrdersRequestParam);
+        requests.put(getOrdersRequestParam.getmRequestTag(), request);
+        request.execute();
+    }
+
+    public void signUpVendorRequest(SignupVendorRequestParam signupRequestParam) {
+        SignUpVendorRequest request = new SignUpVendorRequest(mApiService, signupRequestParam);
         requests.put(signupRequestParam.getmRequestTag(), request);
         request.execute();
     }

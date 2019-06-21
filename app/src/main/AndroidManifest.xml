@@ -35,7 +35,8 @@
 
         <activity android:name=".ProductsActivity"/>
 
-        <activity android:name=".MyOrdersActivity"/>
+        <activity android:name=".MyOrdersActivity"
+        android:label="@string/my_orders"></activity>
 
         <activity android:name=".SettingsActivity"/>
 

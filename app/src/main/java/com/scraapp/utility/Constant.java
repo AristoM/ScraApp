@@ -4,8 +4,10 @@ public final class Constant {
 
     public static final String SIGNIN_REQUEST_TAG = "signin_request_tag";
     public static final String SIGNUP_REQUEST_TAG = "signup_request_tag";
+    public static final String SIGNUP_VENDOR_REQUEST_TAG = "signup_vendor_request_tag";
     public static final String GET_CATEGORIES_REQUEST_TAG = "get_categories_request_tag";
     public static final String PLACE_ORDER_REQUEST_TAG = "place_order_request_tag";
+    public static final String GET_ORDERS_REQUEST_TAG = "get_orders_request_tag";
 
     public static final String SP_FILE_LOGIN = "SP_FILE_LOGIN";
     public static final String SP_USER_NAME = "sp_user_name";

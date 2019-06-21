@@ -7,9 +7,9 @@ import com.scraapp.network.response.ApiCallback;
 
 import retrofit2.Call;
 
-public class SignUpRequest extends AbstractApiRequest {
+public class SignUpVendorRequest extends AbstractApiRequest {
 
-    private SignupRequestParam signupRequestParam;
+    private SignupVendorRequestParam SignupVendorRequestParam;
 
     /**
      * + The callback used for this request. Declared globally for cancellation. See {@link
@@ -25,11 +25,11 @@ public class SignUpRequest extends AbstractApiRequest {
      * Initialize the request with the passed values.
      *
      * @param apiService The {@link ApiService} used for executing the calls.
-     * @param signupRequestParam        Identifies the request.
+     * @param SignupVendorRequestParam        Identifies the request.
      */
-    public SignUpRequest(ApiService apiService, SignupRequestParam signupRequestParam) {
-        super(apiService, signupRequestParam.getmRequestTag());
-        this.signupRequestParam = signupRequestParam;
+    public SignUpVendorRequest(ApiService apiService, SignupVendorRequestParam SignupVendorRequestParam) {
+        super(apiService, SignupVendorRequestParam.getmRequestTag());
+        this.SignupVendorRequestParam = SignupVendorRequestParam;
     }
 
     @Override
@@ -46,7 +46,8 @@ public class SignUpRequest extends AbstractApiRequest {
             return;
         }
 
-        call = apiService.signUpCall(signupRequestParam);
+        call = apiService.signUpVendorCall(SignupVendorRequestParam);
         call.enqueue(callback);
     }
+
 }

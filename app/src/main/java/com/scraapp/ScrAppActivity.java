@@ -116,4 +116,10 @@ abstract public class ScrAppActivity extends AppCompatActivity implements Naviga
         }
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
 }

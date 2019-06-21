@@ -4,13 +4,13 @@ import com.scraapp.network.ApiService;
 
 public class SignupVendorRequestParam extends RequestParam {
 
-    String action;
-    String address;
-    String city;
+    private String action;
+    private String address;
+    private String city;
     String close_time;
     String desc;
-    String email;
-    String lat;
+    private String email;
+    private String lat;
     String lon;
     String location;
     String name;
@@ -18,9 +18,27 @@ public class SignupVendorRequestParam extends RequestParam {
     String phone;
     String website;
     String password;
+    String pan;
+    String adhar;
 
 
-    SignupVendorRequestParam(String action, String address, String city, String  email, ApiService apiService, String requestTag) {
+    public SignupVendorRequestParam(String action, String address, String city, String email, String lat, String lon, String location, String name,
+                                    String phone, String website, String password, String pan, String adhar, ApiService apiService, String requestTag) {
         super(apiService, requestTag);
+        this.action = action;
+        this.address = address;
+        this.city = city;
+        this.email = email;
+        this.lat = lat;
+        this.lon = lon;
+        this.location = location;
+        this.name = name;
+        this.phone = phone;
+        this.website = website;
+        this.password = password;
+        this.pan = pan;
+        this.adhar = adhar;
     }
+
+
 }

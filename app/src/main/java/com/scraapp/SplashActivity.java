@@ -33,6 +33,7 @@ import com.scraapp.network.event.ApiErrorEvent;
 import com.scraapp.network.event.ApiErrorWithMessageEvent;
 import com.scraapp.network.request.LoginRequestParam;
 import com.scraapp.network.request.SignupRequestParam;
+import com.scraapp.network.request.SignupVendorRequestParam;
 import com.scraapp.network.response.AbstractApiResponse;
 import com.scraapp.network.response.SignInResponse;
 import com.scraapp.utility.ActionRequest;
@@ -51,6 +52,7 @@ public class SplashActivity extends ScrAppActivity {
     EditText mShopName, mShopAddress, mEmailSignupVendor, mMobileSignupVendor, mPanNumber, mAdharCard, mPasswordSignupVendor, mConfirmPasswordVendor;
     String sUname, sPwd;
     ImageView mSplashLogo;
+    String vendorLat, vendorLon, vendorCity;
 
     public int getlayout() {
         return R.layout.splash_layout;
@@ -194,7 +196,7 @@ public class SplashActivity extends ScrAppActivity {
         signupCustomerCta.setOnClickListener(view -> {
 
             if(validation(ActionRequest.REGISTER_CUSTOMER)) {
-                if (!mApiClient.isRequestRunning(Constant.SIGNIN_REQUEST_TAG)) {
+                if (!mApiClient.isRequestRunning(Constant.SIGNUP_REQUEST_TAG)) {
                     showProgress();
                     SignupRequestParam signupRequestParam = new SignupRequestParam(ActionRequest.REGISTER_CUSTOMER, mUserNameSignup.getText().toString(),
                             mEmailSignup.getText().toString(), mPasswordSignup.getText().toString(),
@@ -214,12 +216,12 @@ public class SplashActivity extends ScrAppActivity {
 //                startActivity(intent);
 //                finish();
 
-                if (!mApiClient.isRequestRunning(Constant.SIGNIN_REQUEST_TAG)) {
+                if (!mApiClient.isRequestRunning(Constant.SIGNUP_VENDOR_REQUEST_TAG)) {
                     showProgress();
-                    SignupRequestParam signupRequestParam = new SignupRequestParam(ActionRequest.VENDOR_REGISTER, mUserNameSignup.getText().toString(),
-                            mEmailSignup.getText().toString(), mPasswordSignup.getText().toString(),
-                            mMobileSignup.getText().toString(), null, Constant.SIGNUP_REQUEST_TAG);
-                    mApiClient.signUpRequest(signupRequestParam);
+                    SignupVendorRequestParam signupRequestParam = new SignupVendorRequestParam(ActionRequest.VENDOR_REGISTER, mShopAddress.getText().toString(), vendorCity, mEmailSignupVendor.getText().toString(),
+                            vendorLat, vendorLon, vendorCity, mShopName.getText().toString(), mMobileSignupVendor.getText().toString(), "", mPasswordSignupVendor.getText().toString(),
+                            mPanNumber.getText().toString(), mAdharCard.getText().toString(), null, Constant.SIGNUP_VENDOR_REQUEST_TAG);
+                    mApiClient.signUpVendorRequest(signupRequestParam);
                 }
             } else {
                 CommonUtils.displayToast(getContext(), getString(R.string.fill_mandatory_field));
@@ -395,6 +397,14 @@ public class SplashActivity extends ScrAppActivity {
                 signUpLayoutCustomer.setVisibility(View.INVISIBLE);
 
                 break;
+            case Constant.SIGNUP_VENDOR_REQUEST_TAG:
+                dismissProgress();
+
+                CommonUtils.displayToast(getContext(), apiResponse.getMessage());
+                signInLayout.setVisibility(View.VISIBLE);
+                signUpLayoutCustomer.setVisibility(View.INVISIBLE);
+
+                break;
 
             default:
                 break;
@@ -423,6 +433,14 @@ public class SplashActivity extends ScrAppActivity {
 
                 break;
 
+            case Constant.SIGNUP_VENDOR_REQUEST_TAG:
+                dismissProgress();
+
+                CommonUtils.displayToast(getContext(), event.getRetrofitError().toString());
+                Log.e("okhttp", event.getRetrofitError().toString());
+
+                break;
+
             default:
                 break;
         }
@@ -444,6 +462,11 @@ public class SplashActivity extends ScrAppActivity {
                 break;
 
             case Constant.SIGNUP_REQUEST_TAG:
+                dismissProgress();
+                CommonUtils.displayToast(getContext(), event.getResultMsgUser());
+                break;
+
+            case Constant.SIGNUP_VENDOR_REQUEST_TAG:
                 dismissProgress();
                 CommonUtils.displayToast(getContext(), event.getResultMsgUser());
                 break;

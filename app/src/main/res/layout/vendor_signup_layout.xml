@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -8,17 +9,19 @@
         android:id="@+id/signup_layout_vendor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:orientation="vertical"
         android:padding="@dimen/padding_medium"
-        android:visibility="visible">
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <com.scraapp.utility.ScraAppTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/new_vendor_registration"
-            android:gravity="center"
             android:layout_marginBottom="@dimen/button_text_small"
-            android:textColor="@color/white"/>
+            android:gravity="center"
+            android:text="@string/new_vendor_registration"
+            android:textColor="@color/white" />
 
         <com.scraapp.utility.ScraAppEdittext
             android:id="@+id/shop_name"
@@ -28,93 +31,93 @@
             android:hint="@string/user_name"
             android:padding="@dimen/padding_medium"
             android:singleLine="true"
-            android:text="VR and Brothers"/>
+            android:text="VR and Brothers" />
 
         <com.scraapp.utility.ScraAppEdittext
             android:id="@+id/shop_addresss"
             android:layout_width="match_parent"
             android:layout_height="49dp"
-            android:background="@drawable/et_login_bg"
             android:layout_marginTop="@dimen/padding_small"
+            android:background="@drawable/et_login_bg"
             android:hint="@string/address"
             android:padding="@dimen/padding_medium"
             android:singleLine="true"
-            android:text="20, mohammed hussain st, Chennai"/>
+            android:text="20, mohammed hussain st, Chennai" />
 
         <com.scraapp.utility.ScraAppEdittext
             android:id="@+id/email_signup_vendor"
             android:layout_width="match_parent"
             android:layout_height="49dp"
-            android:background="@drawable/et_login_bg"
             android:layout_marginTop="@dimen/padding_small"
+            android:background="@drawable/et_login_bg"
             android:hint="@string/email"
-            android:padding="@dimen/padding_medium"
-            android:text="google@gmail.com"
             android:inputType="textEmailAddress"
-            android:singleLine="true"/>
+            android:padding="@dimen/padding_medium"
+            android:singleLine="true"
+            android:text="google@gmail.com" />
 
         <com.scraapp.utility.ScraAppEdittext
             android:id="@+id/mobile_signup_vendor"
             android:layout_width="match_parent"
             android:layout_height="49dp"
-            android:background="@drawable/et_login_bg"
             android:layout_marginTop="@dimen/padding_small"
+            android:background="@drawable/et_login_bg"
             android:hint="@string/mobile_no"
-            android:padding="@dimen/padding_medium"
-            android:text="1234567890"
-            android:maxLength="10"
             android:inputType="phone"
-            android:singleLine="true"/>
+            android:maxLength="10"
+            android:padding="@dimen/padding_medium"
+            android:singleLine="true"
+            android:text="1234567890" />
 
         <com.scraapp.utility.ScraAppEdittext
             android:id="@+id/pan_number"
             android:layout_width="match_parent"
             android:layout_height="49dp"
-            android:background="@drawable/et_login_bg"
             android:layout_marginTop="@dimen/padding_small"
+            android:background="@drawable/et_login_bg"
             android:hint="@string/adhar_number"
-            android:padding="@dimen/padding_medium"
-            android:text=""
-            android:maxLength="10"
             android:inputType="text"
-            android:singleLine="true"/>
+            android:maxLength="10"
+            android:padding="@dimen/padding_medium"
+            android:singleLine="true"
+            android:text="" />
 
         <com.scraapp.utility.ScraAppEdittext
             android:id="@+id/adhar_number"
             android:layout_width="match_parent"
             android:layout_height="49dp"
-            android:background="@drawable/et_login_bg"
             android:layout_marginTop="@dimen/padding_small"
+            android:background="@drawable/et_login_bg"
             android:hint="@string/pan_number"
-            android:padding="@dimen/padding_medium"
-            android:text=""
-            android:maxLength="10"
             android:inputType="text"
-            android:singleLine="true"/>
+            android:maxLength="10"
+            android:padding="@dimen/padding_medium"
+            android:singleLine="true"
+            android:text="" />
 
         <com.scraapp.utility.ScraAppEdittext
             android:id="@+id/password_signup_vendor"
             android:layout_width="match_parent"
             android:layout_height="49dp"
-            android:background="@drawable/et_login_bg"
             android:layout_marginTop="@dimen/padding_small"
+            android:background="@drawable/et_login_bg"
             android:hint="@string/password"
-            android:padding="@dimen/padding_medium"
-            android:text="aristo"
             android:inputType="textPassword"
-            android:singleLine="true"/>
+            android:padding="@dimen/padding_medium"
+            android:singleLine="true"
+            android:text="aristo" />
 
         <com.scraapp.utility.ScraAppEdittext
             android:id="@+id/confirm_password_signup_vendor"
             android:layout_width="match_parent"
             android:layout_height="49dp"
-            android:background="@drawable/et_login_bg"
             android:layout_marginTop="@dimen/padding_small"
+            android:background="@drawable/et_login_bg"
             android:hint="@string/confirm_password"
-            android:padding="@dimen/padding_medium"
             android:inputType="textPassword"
-            android:text="aristo"
-            android:singleLine="true"/>
+            android:padding="@dimen/padding_medium"
+            android:singleLine="true"
+            android:text="aristo" />
 
         <com.scraapp.utility.ScraAppButton
             android:id="@+id/signup_cta_vendor"

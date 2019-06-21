@@ -75,6 +75,7 @@
 
     <string name="new_customer_registration">New customer registration</string>
     <string name="new_vendor_registration">New vendor registeration</string>
+    <string name="my_orders">My Orders</string>
 
 
 </resources>

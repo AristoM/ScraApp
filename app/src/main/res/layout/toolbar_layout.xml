@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        app:theme="@style/ToolbarTheme"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:theme="@style/ToolbarTheme" />
 
 
 
