@@ -14,6 +14,7 @@ public final class Constant {
     public static final String SP_PASSWORD = "sp_password";
     public static final String SP_USERID = "sp_userid";
     public static final String SP_USER_TYPE = "sp_user_type";
+    public static final String SP_LOGIN_ACTION = "sp_login_action";
 
     public static final String IS_FROM_SIGNOUT = "is_from_signout";
 

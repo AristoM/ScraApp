@@ -50,7 +50,7 @@ public class SplashActivity extends ScrAppActivity {
     LinearLayout signInLayout, signUpLayoutCustomer, signUpLayoutVendor;
     EditText mUserName, mPassword, mUserNameSignup, mPasswordSignup, mConfirmPassword, mMobileSignup, mEmailSignup;
     EditText mShopName, mShopAddress, mEmailSignupVendor, mMobileSignupVendor, mPanNumber, mAdharCard, mPasswordSignupVendor, mConfirmPasswordVendor;
-    String sUname, sPwd;
+    String sUname, sPwd, mAction;
     ImageView mSplashLogo;
     String vendorLat, vendorLon, vendorCity;
 
@@ -103,7 +103,7 @@ public class SplashActivity extends ScrAppActivity {
 
 
         if(!TextUtils.isEmpty(CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME))) {
-            String type = CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_TYPE);
+            String type = CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_LOGIN_ACTION);
             loginProcess(type);
         } else {
             signInLayout.setVisibility(View.VISIBLE);
@@ -136,6 +136,7 @@ public class SplashActivity extends ScrAppActivity {
                         if(validation(ActionRequest.LOGIN)) {
                             sUname = mUserName.getText().toString();
                             sPwd = mPassword.getText().toString();
+                            mAction = ActionRequest.LOGIN;
                             loginProcess(ActionRequest.LOGIN);
                         } else {
                             CommonUtils.displayToast(getContext(), getString(R.string.fill_mandatory_field));
@@ -145,6 +146,7 @@ public class SplashActivity extends ScrAppActivity {
                         if(validation(ActionRequest.LOGIN)) {
                             sUname = mUserName.getText().toString();
                             sPwd = mPassword.getText().toString();
+                            mAction = ActionRequest.LOGIN_VENDOR;
                             loginProcess(ActionRequest.LOGIN_VENDOR);
                         } else {
                             CommonUtils.displayToast(getContext(), getString(R.string.fill_mandatory_field));
@@ -381,6 +383,7 @@ public class SplashActivity extends ScrAppActivity {
                     CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_PASSWORD, sPwd);
                     CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_TYPE, signInResponse.getResult().getUser().getUserType());
                     CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USERID, ((SignInResponse) apiResponse).getResult().getUser().getId());
+                    CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_LOGIN_ACTION, mAction);
                 }
 
                 Intent intent = new Intent(SplashActivity.this, BaseActivity.class);
@@ -395,6 +398,7 @@ public class SplashActivity extends ScrAppActivity {
                 CommonUtils.displayToast(getContext(), apiResponse.getMessage());
                 signInLayout.setVisibility(View.VISIBLE);
                 signUpLayoutCustomer.setVisibility(View.INVISIBLE);
+                signUpLayoutVendor.setVisibility(View.INVISIBLE);
 
                 break;
             case Constant.SIGNUP_VENDOR_REQUEST_TAG:
@@ -403,6 +407,7 @@ public class SplashActivity extends ScrAppActivity {
                 CommonUtils.displayToast(getContext(), apiResponse.getMessage());
                 signInLayout.setVisibility(View.VISIBLE);
                 signUpLayoutCustomer.setVisibility(View.INVISIBLE);
+                signUpLayoutVendor.setVisibility(View.INVISIBLE);
 
                 break;
 
@@ -464,11 +469,17 @@ public class SplashActivity extends ScrAppActivity {
             case Constant.SIGNUP_REQUEST_TAG:
                 dismissProgress();
                 CommonUtils.displayToast(getContext(), event.getResultMsgUser());
+                signInLayout.setVisibility(View.VISIBLE);
+                signUpLayoutCustomer.setVisibility(View.INVISIBLE);
+                signUpLayoutVendor.setVisibility(View.INVISIBLE);
                 break;
 
             case Constant.SIGNUP_VENDOR_REQUEST_TAG:
                 dismissProgress();
                 CommonUtils.displayToast(getContext(), event.getResultMsgUser());
+                signInLayout.setVisibility(View.VISIBLE);
+                signUpLayoutCustomer.setVisibility(View.INVISIBLE);
+                signUpLayoutVendor.setVisibility(View.INVISIBLE);
                 break;
 
             default:
@@ -533,6 +544,9 @@ public class SplashActivity extends ScrAppActivity {
         // TODO call location based filter
 
         LatLng latLong = place.getLatLng();
+        vendorLat = String.valueOf(latLong.latitude);
+        vendorLon = String.valueOf(latLong.longitude);
+
 
         mShopAddress.setText(place.getName() + "");
 

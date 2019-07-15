@@ -14,7 +14,6 @@ import com.scraapp.network.response.SignInResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
 
 public interface ApiService {
 
@@ -42,7 +41,7 @@ public interface ApiService {
     @POST("users/")
     Call<AbstractApiResponse> getOrders(@Body GetOrdersRequestParam body);
 
-    @POST("vendor/")
+    @POST("vendors/")
     Call<AbstractApiResponse> signUpVendorCall(@Body SignupVendorRequestParam body);
 
     @POST("categories/")
