@@ -48,8 +48,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.scraapp.greendao.Categories;
-import com.scraapp.greendao.CategoriesDao;
-import com.scraapp.greendao.DaoSession;
 import com.scraapp.network.event.ApiErrorEvent;
 import com.scraapp.network.event.ApiErrorWithMessageEvent;
 import com.scraapp.network.request.GetCategoriesRequestParam;
@@ -61,7 +59,6 @@ import com.scraapp.utility.CustomTypefaceSpan;
 import com.scraapp.utility.ScraAppTextView;
 
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.greendao.query.Query;
 
 import java.util.List;
 

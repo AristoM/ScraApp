@@ -3,8 +3,18 @@ package com.scraapp.dialog;
 import android.content.DialogInterface;
 
 import com.scraapp.R;
+import com.scraapp.mediators.BaseMediator;
 
 public class OrderSuccessDialog extends YesAndNoDialog {
+
+    BaseMediator baseMediator;
+
+    public OrderSuccessDialog() {
+    }
+
+    public void setListener(BaseMediator listener) {
+        baseMediator = listener;
+    }
 
     @Override
     public String setTitle() {
@@ -29,7 +39,10 @@ public class OrderSuccessDialog extends YesAndNoDialog {
     @Override
     public DialogInterface.OnClickListener positiveButtonClick() {
 
-        return (dialogInterface, i) -> dismiss();
+        return (dialogInterface, i) -> {
+            dismiss();
+            baseMediator.finishActivity();
+        };
     }
 
     @Override

@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -22,9 +23,20 @@ import android.widget.LinearLayout;
 import com.scraapp.dialog.SignOutDialog;
 import com.scraapp.dialog.YesAndNoDialog;
 import com.scraapp.frgments.BaseFragment;
+import com.scraapp.greendao.Categories;
 import com.scraapp.mediators.BaseMediator;
+import com.scraapp.network.event.ApiErrorEvent;
+import com.scraapp.network.event.ApiErrorWithMessageEvent;
+import com.scraapp.network.request.GetCategoriesRequestParam;
+import com.scraapp.network.response.CategoriesResponse;
+import com.scraapp.network.response.Products;
+import com.scraapp.utility.ActionRequest;
 import com.scraapp.utility.Constant;
 import com.scraapp.utility.CustomTypefaceSpan;
+
+import org.greenrobot.eventbus.Subscribe;
+
+import java.util.List;
 
 public class BaseActivity extends ClickAwareActivity implements BaseMediator {
 
@@ -44,14 +56,14 @@ public class BaseActivity extends ClickAwareActivity implements BaseMediator {
 
     @Override
     public int getlayout() {
-        return R.layout.home_activity_test;
+        return R.layout.base_activity;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        setContentView(R.layout.home_activity_test);
+//        setContentView(R.layout.base_activity);
 
         parentLayout = findViewById(R.id.parent_layout);
 
@@ -87,6 +99,14 @@ public class BaseActivity extends ClickAwareActivity implements BaseMediator {
 
         navView.setNavigationItemSelectedListener(this);
 
+        initApi();
+
+    }
+
+    private void initApi() {
+        GetCategoriesRequestParam getCategoriesRequestParam = new GetCategoriesRequestParam(null,
+                Constant.GET_CATEGORIES_REQUEST_TAG, ActionRequest.GET_CATEGORIES);
+        mApiClient.getAllCategoriesRequest(getCategoriesRequestParam);
     }
 
     private void applyFontToMenuItem(MenuItem mi) {
@@ -185,5 +205,75 @@ public class BaseActivity extends ClickAwareActivity implements BaseMediator {
     public void handleLogout() {
         signOut();
 //        Toast.makeText(mContext, "welcome", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void finishActivity() {
+
+    }
+
+    /**
+     * Response of Uploaded File
+     *
+     * @param apiResponse UploadFileResponse
+     */
+    @Subscribe
+    public void onEventMainThread(CategoriesResponse apiResponse) {
+        switch (apiResponse.getRequestTag()) {
+            case Constant.GET_CATEGORIES_REQUEST_TAG:
+                dismissProgress();
+                CommonUtils.displayToast(getContext(), apiResponse.getStatus());
+
+                List<Products> categoriesList = apiResponse.getResult().getProducts();
+                deleteDB();
+                for(Products products: categoriesList) {
+                    Categories categories = new Categories(null, products.getId(), products.getName(), products.getDescription());
+                    categoriesDao.insert(categories);
+                }
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * EventBus listener. An API call failed. No error message was returned.
+     *
+     * @param event ApiErrorEvent
+     */
+    @Subscribe
+    public void onEventMainThread(ApiErrorEvent event) {
+        switch (event.getRequestTag()) {
+            case Constant.GET_CATEGORIES_REQUEST_TAG:
+                dismissProgress();
+                CommonUtils.displayToast(getContext(), event.getRetrofitError().toString());
+                Log.e("okhttp", event.getRetrofitError().toString());
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * EventBus listener. An API call failed. An error message was returned.
+     *
+     * @param event ApiErrorWithMessageEvent Contains the error message.
+     */
+    @Subscribe
+    public void onEventMainThread(ApiErrorWithMessageEvent event) {
+        switch (event.getRequestTag()) {
+            case Constant.GET_CATEGORIES_REQUEST_TAG:
+                dismissProgress();
+                CommonUtils.displayToast(getContext(), event.getResultMsgUser());
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void deleteDB() {
+        categoriesDao.deleteAll();
     }
 }

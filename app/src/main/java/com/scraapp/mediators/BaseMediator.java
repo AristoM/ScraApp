@@ -6,4 +6,6 @@ public interface BaseMediator {
 
     void commitFragment(BaseFragment baseFragment);
     void handleLogout();
+    void finishActivity();
+
 }

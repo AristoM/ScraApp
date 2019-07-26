@@ -2,7 +2,6 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.scraapp.HomeActivity"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <com.scraapp.utility.ScraAppButton
@@ -25,12 +24,10 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <fragment
-            xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/mapView"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context="com.scraapp.HomeActivity" />
+            android:layout_height="match_parent" />
 
         <LinearLayout
             android:id="@+id/locationMarker"

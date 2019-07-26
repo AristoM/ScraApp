@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -20,14 +19,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.scraapp.dialog.ApproximateDialog;
 import com.scraapp.dialog.OrderSuccessDialog;
 import com.scraapp.dialog.YesAndNoDialog;
+import com.scraapp.frgments.BaseFragment;
 import com.scraapp.greendao.Categories;
 import com.scraapp.greendao.CategoriesDao;
 import com.scraapp.greendao.DaoSession;
+import com.scraapp.mediators.BaseMediator;
 import com.scraapp.network.event.ApiErrorEvent;
 import com.scraapp.network.event.ApiErrorWithMessageEvent;
 import com.scraapp.network.request.OrderItems;
@@ -45,7 +45,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ProductsActivity extends ScrAppActivity {
+public class ProductsActivity extends ScrAppActivity implements BaseMediator {
 
     Toolbar toolbar;
 
@@ -239,7 +239,9 @@ public class ProductsActivity extends ScrAppActivity {
                 PlaceOrderResponse placeOrderResponse = (PlaceOrderResponse) apiResponse;
 //                Toast.makeText(this, placeOrderResponse.getMessage(), Toast.LENGTH_SHORT).show();
 
-                openDialog(new OrderSuccessDialog());
+                OrderSuccessDialog orderSuccessDialog = new OrderSuccessDialog();
+                orderSuccessDialog.setListener(ProductsActivity.this);
+                openDialog(orderSuccessDialog);
 
                 break;
         }
@@ -284,5 +286,20 @@ public class ProductsActivity extends ScrAppActivity {
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         return false;
+    }
+
+    @Override
+    public void commitFragment(BaseFragment baseFragment) {
+
+    }
+
+    @Override
+    public void handleLogout() {
+
+    }
+
+    @Override
+    public void finishActivity() {
+        finish();
     }
 }
