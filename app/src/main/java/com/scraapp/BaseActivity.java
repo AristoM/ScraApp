@@ -3,7 +3,6 @@ package com.scraapp;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -18,7 +17,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.scraapp.dialog.SignOutDialog;
 import com.scraapp.dialog.YesAndNoDialog;
@@ -40,19 +41,20 @@ import java.util.List;
 
 public class BaseActivity extends ClickAwareActivity implements BaseMediator {
 
-    private static Context instance;
+//    private static Context instance;
     LinearLayout parentLayout;
 
     protected NavigationView navView;
     private DrawerLayout mDrawerLayout;
+    private TextView userName, userMailId;
 
 
-    public static Context getInstance() {
-        if(instance == null) {
-            instance = new BaseActivity();
-        }
-        return instance;
-    }
+//    public static Context getInstance() {
+//        if(instance == null) {
+//            instance = new BaseActivity();
+//        }
+//        return instance;
+//    }
 
     @Override
     public int getlayout() {
@@ -72,9 +74,13 @@ public class BaseActivity extends ClickAwareActivity implements BaseMediator {
         HomeFragment homeFragment = new HomeFragment();
         commitFragment(homeFragment);
 
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-
         navView = findViewById(R.id.nav_view);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        View headerLayout = navView.getHeaderView(0);
+        userName = headerLayout.findViewById(R.id.user_name);
+        userMailId = headerLayout.findViewById(R.id.user_mail_id);
+
+
         Menu m = navView.getMenu();
         for (int i = 0; i < m.size(); i++) {
             MenuItem mi = m.getItem(i);
@@ -98,6 +104,9 @@ public class BaseActivity extends ClickAwareActivity implements BaseMediator {
         toggle.syncState();
 
         navView.setNavigationItemSelectedListener(this);
+
+        String sUname = CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_MAIL_ID);
+        userMailId.setText(sUname);
 
         initApi();
 
@@ -137,10 +146,10 @@ public class BaseActivity extends ClickAwareActivity implements BaseMediator {
 
             Intent myorder = new Intent(this, MyOrdersActivity.class);
             startActivity(myorder);
-        } else if (id == R.id.nav_settings) {
+        } /*else if (id == R.id.nav_settings) {
             Intent settings = new Intent(this, SettingsActivity.class);
             startActivity(settings);
-        } else if (id == R.id.nav_signout) {
+        }*/ else if (id == R.id.nav_signout) {
             SignOutDialog signOutDialog = new SignOutDialog();
             signOutDialog.setListener(BaseActivity.this);
             signOutDialog(signOutDialog);
@@ -167,7 +176,7 @@ public class BaseActivity extends ClickAwareActivity implements BaseMediator {
 
     public void signOut() {
         SharedPreferences preferences = mContext.getSharedPreferences(Constant.SP_FILE_LOGIN, 0);
-        preferences.edit().remove(Constant.SP_USER_NAME).apply();
+        preferences.edit().remove(Constant.SP_USER_MAIL_ID).apply();
         preferences.edit().remove(Constant.SP_PASSWORD).apply();
 
         Intent intent = new Intent(mContext, SplashActivity.class);
@@ -222,7 +231,7 @@ public class BaseActivity extends ClickAwareActivity implements BaseMediator {
         switch (apiResponse.getRequestTag()) {
             case Constant.GET_CATEGORIES_REQUEST_TAG:
                 dismissProgress();
-                CommonUtils.displayToast(getContext(), apiResponse.getStatus());
+//                CommonUtils.displayToast(getContext(), apiResponse.getStatus());
 
                 List<Products> categoriesList = apiResponse.getResult().getProducts();
                 deleteDB();

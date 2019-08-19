@@ -1,14 +1,10 @@
 package com.scraapp;
 
-import android.Manifest;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -27,7 +23,6 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.scraapp.network.event.ApiErrorEvent;
 import com.scraapp.network.event.ApiErrorWithMessageEvent;
@@ -102,9 +97,9 @@ public class SplashActivity extends ScrAppActivity {
         }
 
 
-        if(!TextUtils.isEmpty(CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME))) {
+        if(!TextUtils.isEmpty(CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_MAIL_ID))) {
             String type = CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_LOGIN_ACTION);
-            loginProcess(type);
+            loginProcess(type, true);
         } else {
             signInLayout.setVisibility(View.VISIBLE);
             signUpLayoutCustomer.setVisibility(View.GONE);
@@ -113,78 +108,71 @@ public class SplashActivity extends ScrAppActivity {
 
         mShopAddress.setFocusable(false);
         mShopAddress.setClickable(true);
-        mShopAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openAutocompleteActivity();
-            }
-        });
+        mShopAddress.setOnClickListener(view -> openAutocompleteActivity());
 
         loginCta.setOnClickListener(view -> {
 
-            CharSequence options[] = new CharSequence[] {"Are you a Customer?", "Are you a Vendor?"};
+            if(validation(ActionRequest.LOGIN)) {
+                CharSequence[] options = new CharSequence[]{"Are you a Customer?", "Are you a Vendor?"};
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setCancelable(true);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setCancelable(true);
 //            builder.setTitle("Select your option:");
-            builder.setItems(options, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int pos) {
+                builder.setItems(options, (dialog, pos) -> {
                     // the user clicked on options[which]
-                    if(pos == 0) {
+                    if (pos == 0) {
                         CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_TYPE, "login");
-                        if(validation(ActionRequest.LOGIN)) {
+                        if (validation(ActionRequest.LOGIN)) {
                             sUname = mUserName.getText().toString();
                             sPwd = mPassword.getText().toString();
                             mAction = ActionRequest.LOGIN;
-                            loginProcess(ActionRequest.LOGIN);
+                            loginProcess(ActionRequest.LOGIN, false);
                         } else {
                             CommonUtils.displayToast(getContext(), getString(R.string.fill_mandatory_field));
                         }
                     } else {
                         CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_TYPE, "vendor_login");
-                        if(validation(ActionRequest.LOGIN)) {
+                        if (validation(ActionRequest.LOGIN)) {
                             sUname = mUserName.getText().toString();
                             sPwd = mPassword.getText().toString();
                             mAction = ActionRequest.LOGIN_VENDOR;
-                            loginProcess(ActionRequest.LOGIN_VENDOR);
+                            loginProcess(ActionRequest.LOGIN_VENDOR, false);
                         } else {
                             CommonUtils.displayToast(getContext(), getString(R.string.fill_mandatory_field));
                         }
                     }
-                }
-            });
+                });
 //            builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
 //                @Override
 //                public void onClick(DialogInterface dialog, int which) {
 //                    //the user clicked on Cancel
 //                }
 //            });
-            builder.show();
+                builder.show();
+            } else {
+                CommonUtils.displayToast(getContext(), getString(R.string.fill_mandatory_field));
+            }
 
         });
 
         newUser.setOnClickListener(view -> {
 
-            CharSequence options[] = new CharSequence[] {"Are you a Customer?", "Are you a Vendor?"};
+            CharSequence[] options = new CharSequence[]{"Are you a Customer?", "Are you a Vendor?"};
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(true);
 //            builder.setTitle("Select your option:");
-            builder.setItems(options, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int pos) {
-                    // the user clicked on options[which]
-                    if(pos == 0) {
-                        signInLayout.setVisibility(View.INVISIBLE);
-                        mSplashLogo.setVisibility(View.GONE);
-                        signUpLayoutCustomer.setVisibility(View.VISIBLE);
-                    } else {
-                        signInLayout.setVisibility(View.INVISIBLE);
-                        mSplashLogo.setVisibility(View.GONE);
-                        signUpLayoutCustomer.setVisibility(View.GONE);
-                        signUpLayoutVendor.setVisibility(View.VISIBLE);
-                    }
+            builder.setItems(options, (dialog, pos) -> {
+                // the user clicked on options[which]
+                if(pos == 0) {
+                    signInLayout.setVisibility(View.INVISIBLE);
+                    mSplashLogo.setVisibility(View.GONE);
+                    signUpLayoutCustomer.setVisibility(View.VISIBLE);
+                } else {
+                    signInLayout.setVisibility(View.INVISIBLE);
+                    mSplashLogo.setVisibility(View.GONE);
+                    signUpLayoutCustomer.setVisibility(View.GONE);
+                    signUpLayoutVendor.setVisibility(View.VISIBLE);
                 }
             });
             builder.show();
@@ -374,12 +362,13 @@ public class SplashActivity extends ScrAppActivity {
                 dismissProgress();
                 CommonUtils.displayToast(getContext(), apiResponse.getMessage());
 
-                if(!TextUtils.isEmpty(CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME))) {
-                    sUname = CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME);
+                if(!TextUtils.isEmpty(CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_MAIL_ID))) {
+                    sUname = CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_MAIL_ID);
                     sPwd = CommonUtils.getSharedPref( Constant.SP_FILE_LOGIN, Constant.SP_PASSWORD);
                 } else {
                     SignInResponse signInResponse = (SignInResponse) apiResponse;
-                    CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME, sUname);
+//                    CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_NAME, apiResponse.);
+                    CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_MAIL_ID, sUname);
                     CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_PASSWORD, sPwd);
                     CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_TYPE, signInResponse.getResult().getUser().getUserType());
                     CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USERID, ((SignInResponse) apiResponse).getResult().getUser().getId());
@@ -487,12 +476,20 @@ public class SplashActivity extends ScrAppActivity {
         }
     }
 
-    void loginProcess(String action) {
+    void loginProcess(String action, boolean isSaved) {
         if (!mApiClient.isRequestRunning(Constant.SIGNIN_REQUEST_TAG)) {
             showProgress();
-            LoginRequestParam loginRequestParam = new LoginRequestParam(action, mUserName.getText().toString(), mPassword.getText().toString()
-                    , null, Constant.SIGNIN_REQUEST_TAG);
-            mApiClient.signInRequest(loginRequestParam);
+            if(isSaved) {
+                String username = CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_MAIL_ID);
+                String password = CommonUtils.getSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_PASSWORD);
+                LoginRequestParam loginRequestParam = new LoginRequestParam(action, username, password
+                        , null, Constant.SIGNIN_REQUEST_TAG);
+                mApiClient.signInRequest(loginRequestParam);
+            } else {
+                LoginRequestParam loginRequestParam = new LoginRequestParam(action, mUserName.getText().toString(), mPassword.getText().toString()
+                        , null, Constant.SIGNIN_REQUEST_TAG);
+                mApiClient.signInRequest(loginRequestParam);
+            }
         }
     }
 
@@ -548,21 +545,20 @@ public class SplashActivity extends ScrAppActivity {
         vendorLon = String.valueOf(latLong.longitude);
 
 
-        mShopAddress.setText(place.getName() + "");
+        mShopAddress.setText(place.getName());
 
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(latLong).zoom(19f).tilt(70).build();
+//        CameraPosition cameraPosition = new CameraPosition.Builder()
+//                .target(latLong).zoom(19f).tilt(70).build();
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+//                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//        }
     }
 }

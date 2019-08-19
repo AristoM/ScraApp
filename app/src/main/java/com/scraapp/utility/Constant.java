@@ -11,6 +11,7 @@ public final class Constant {
 
     public static final String SP_FILE_LOGIN = "SP_FILE_LOGIN";
     public static final String SP_USER_NAME = "sp_user_name";
+    public static final String SP_USER_MAIL_ID = "sp_user_mail_id";
     public static final String SP_PASSWORD = "sp_password";
     public static final String SP_USERID = "sp_userid";
     public static final String SP_USER_TYPE = "sp_user_type";

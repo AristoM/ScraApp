@@ -7,15 +7,15 @@
         <item
             android:id="@+id/nav_my_orders"
             android:icon="@drawable/ic_menu_camera"
-            android:title="My orders" />
-        <item
+            android:title="@string/my_orders" />
+        <!--<item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Settings" />
+            android:title="Settings" />-->
         <item
             android:id="@+id/nav_signout"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Signout" />
+            android:title="@string/signout_menu" />
         <!--<item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"

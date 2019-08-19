@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:id="@+id/signin_layout"
@@ -11,7 +12,8 @@
         android:layout_marginBottom="@dimen/padding_xxmedium"
         android:orientation="vertical"
         android:padding="@dimen/padding_medium"
-        android:visibility="invisible">
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.scraapp.utility.ScraAppEdittext
             android:id="@+id/user_name"
@@ -20,7 +22,7 @@
             android:background="@drawable/et_login_bg"
             android:hint="@string/user_name_mob_no"
             android:padding="@dimen/padding_medium"
-            android:text="rajeshram0205@gmail.com"
+            android:text=""
             android:singleLine="true"/>
 
         <com.scraapp.utility.ScraAppEdittext
@@ -29,7 +31,7 @@
             android:layout_height="49dp"
             android:background="@drawable/et_login_bg"
             android:hint="@string/password"
-            android:text="rajesh"
+            android:text=""
             android:inputType="textPassword"
             android:layout_marginTop="@dimen/padding_xsmall"
             android:padding="@dimen/padding_medium"
@@ -61,7 +63,8 @@
                 android:text="@string/forget_password"
                 android:layout_marginTop="@dimen/padding_small"
                 android:textColor="@color/white"
-                android:textSize="@dimen/button_text_xxsmall" />
+                android:textSize="@dimen/button_text_xxsmall"
+                android:visibility="invisible"/>
 
         </LinearLayout>
 

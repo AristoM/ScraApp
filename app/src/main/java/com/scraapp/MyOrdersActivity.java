@@ -9,9 +9,7 @@ import android.view.MenuItem;
 
 import com.scraapp.network.event.ApiErrorEvent;
 import com.scraapp.network.event.ApiErrorWithMessageEvent;
-import com.scraapp.network.request.GetOrdersRequestParam;
 import com.scraapp.network.response.AbstractApiResponse;
-import com.scraapp.utility.ActionRequest;
 import com.scraapp.utility.Constant;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -31,11 +29,13 @@ public class MyOrdersActivity extends ClickAwareActivity {
         setSupportActionBar(mToolbar);
         mToolbar.setTitle(R.string.my_orders);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
-        GetOrdersRequestParam getOrdersRequestParam = new GetOrdersRequestParam(ActionRequest.GET_ORDERS, "1", null, Constant.GET_ORDERS_REQUEST_TAG);
-        mApiClient.getOrdersRequest(getOrdersRequestParam);
+//        GetOrdersRequestParam getOrdersRequestParam = new GetOrdersRequestParam(ActionRequest.GET_ORDERS, "1", null, Constant.GET_ORDERS_REQUEST_TAG);
+//        mApiClient.getOrdersRequest(getOrdersRequestParam);
 
     }
 

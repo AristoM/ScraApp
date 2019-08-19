@@ -31,7 +31,7 @@
             android:hint="@string/user_name"
             android:padding="@dimen/padding_medium"
             android:singleLine="true"
-            android:text="VR and Brothers" />
+            android:text="" />
 
         <com.scraapp.utility.ScraAppEdittext
             android:id="@+id/shop_addresss"
@@ -42,7 +42,7 @@
             android:hint="@string/address"
             android:padding="@dimen/padding_medium"
             android:singleLine="true"
-            android:text="20, mohammed hussain st, Chennai" />
+            android:text="" />
 
         <com.scraapp.utility.ScraAppEdittext
             android:id="@+id/email_signup_vendor"
@@ -54,7 +54,7 @@
             android:inputType="textEmailAddress"
             android:padding="@dimen/padding_medium"
             android:singleLine="true"
-            android:text="google@gmail.com" />
+            android:text="" />
 
         <com.scraapp.utility.ScraAppEdittext
             android:id="@+id/mobile_signup_vendor"
@@ -67,7 +67,7 @@
             android:maxLength="10"
             android:padding="@dimen/padding_medium"
             android:singleLine="true"
-            android:text="1234567890" />
+            android:text="" />
 
         <com.scraapp.utility.ScraAppEdittext
             android:id="@+id/pan_number"
@@ -105,7 +105,7 @@
             android:inputType="textPassword"
             android:padding="@dimen/padding_medium"
             android:singleLine="true"
-            android:text="aristo" />
+            android:text="" />
 
         <com.scraapp.utility.ScraAppEdittext
             android:id="@+id/confirm_password_signup_vendor"
@@ -117,7 +117,7 @@
             android:inputType="textPassword"
             android:padding="@dimen/padding_medium"
             android:singleLine="true"
-            android:text="aristo" />
+            android:text="" />
 
         <com.scraapp.utility.ScraAppButton
             android:id="@+id/signup_cta_vendor"

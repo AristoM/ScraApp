@@ -89,7 +89,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Callba
 
         view = inflater.inflate(R.layout.home_fragment, container, false);
 
-        mMapView = (MapView) view.findViewById(R.id.mapView);
+        mMapView = view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
         mMapView.onResume(); // needed to get the map to display immediately
@@ -357,7 +357,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Callba
                 autoCompleteCallback(data);
             }
         } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-            Status status = PlaceAutocomplete.getStatus(getActivity(), data);
+//            Status status = PlaceAutocomplete.getStatus(getActivity(), data);
         }
 //        else if (resultCode == RESULT_CANCELED) {
             // Indicates that the activity closed before a selection was made. For example if
@@ -367,13 +367,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Callba
 
     @Override
     public void locationNoThanks() {
-        Toast.makeText(getActivity(), "no thanks", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), "no thanks", Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
     public void locationOk() {
-        Toast.makeText(getActivity(), "Ok", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), "Ok", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -411,7 +411,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Callba
      * Receiver for data sent from FetchAddressIntentService.
      */
     class AddressResultReceiver extends ResultReceiver {
-        public AddressResultReceiver(Handler handler) {
+        AddressResultReceiver(Handler handler) {
             super(handler);
         }
 
@@ -432,11 +432,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Callba
             displayAddressOutput();
 
             // Show a toast message if an address was found.
-            if (resultCode == CommonUtils.LocationConstants.SUCCESS_RESULT) {
-                //  showToast(getString(R.string.address_found));
-
-
-            }
+//            if (resultCode == CommonUtils.LocationConstants.SUCCESS_RESULT) {
+//                //  showToast(getString(R.string.address_found));
+//
+//
+//            }
 
         }
 
