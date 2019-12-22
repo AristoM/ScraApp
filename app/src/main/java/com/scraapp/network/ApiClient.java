@@ -43,7 +43,7 @@ public class ApiClient {
     private static final String WS_HOSTNAME = "/";
     private static final String WS_SUFFIX_FOLDER = "api/";
 
-    private static String API_BASE_URL = "https://scra.app/api/";
+    private static String API_BASE_URL = "https://api.justscrappit.com/";
 
     /**
      * Makes the ApiService calls.

@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +36,8 @@ import com.scraapp.network.response.AbstractApiResponse;
 import com.scraapp.network.response.SignInResponse;
 import com.scraapp.utility.ActionRequest;
 import com.scraapp.utility.Constant;
+import com.scraapp.utility.TextWatcherListener;
+import com.scraapp.utility.UIutil;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -41,13 +46,16 @@ public class SplashActivity extends ScrAppActivity {
     protected static final int REQUEST_CODE_AUTOCOMPLETE = 1;
 
     Button loginCta, signupCustomerCta, signupVendorCta;
-    TextView newUser;
+    TextView newUser, errorMsg, errorMsgCustomer, errorMsgVendor;
     LinearLayout signInLayout, signUpLayoutCustomer, signUpLayoutVendor;
     EditText mUserName, mPassword, mUserNameSignup, mPasswordSignup, mConfirmPassword, mMobileSignup, mEmailSignup;
+    TextInputLayout mUserNameLayout, mPasswordLayout;
     EditText mShopName, mShopAddress, mEmailSignupVendor, mMobileSignupVendor, mPanNumber, mAdharCard, mPasswordSignupVendor, mConfirmPasswordVendor;
     String sUname, sPwd, mAction;
     ImageView mSplashLogo;
     String vendorLat, vendorLon, vendorCity;
+    View mainview;
+    int defautlTextColor;
 
     public int getlayout() {
         return R.layout.splash_layout;
@@ -86,6 +94,84 @@ public class SplashActivity extends ScrAppActivity {
         mPasswordSignupVendor = findViewById(R.id.password_signup_vendor);
         mConfirmPasswordVendor = findViewById(R.id.confirm_password_signup_vendor);
 
+        mUserNameLayout = findViewById(R.id.user_name_layout);
+        mPasswordLayout = findViewById(R.id.password_layout);
+        mainview = findViewById(R.id.mainview);
+        errorMsg = findViewById(R.id.error_msg);
+        errorMsgCustomer = findViewById(R.id.error_msg_vendor);
+        errorMsgVendor = findViewById(R.id.error_msg_customer);
+
+        mPassword.setTransformationMethod(new PasswordTransformationMethod());
+        mPasswordSignup.setTransformationMethod(new PasswordTransformationMethod());
+        mConfirmPassword.setTransformationMethod(new PasswordTransformationMethod());
+        mPasswordSignupVendor.setTransformationMethod(new PasswordTransformationMethod());
+        mConfirmPasswordVendor.setTransformationMethod(new PasswordTransformationMethod());
+
+        TextChangeListener textChangeListener;
+        defautlTextColor = mUserName.getCurrentTextColor();
+
+        textChangeListener = new TextChangeListener(mUserName, defautlTextColor, ActionRequest.LOGIN);
+        mUserName.addTextChangedListener(textChangeListener);
+        mUserName.setOnFocusChangeListener(textChangeListener);
+
+        textChangeListener = new TextChangeListener(mPassword, defautlTextColor, ActionRequest.LOGIN);
+        mPassword.addTextChangedListener(textChangeListener);
+        mPassword.setOnFocusChangeListener(textChangeListener);
+
+        textChangeListener = new TextChangeListener(mUserNameSignup, defautlTextColor, ActionRequest.REGISTER_CUSTOMER);
+        mUserNameSignup.addTextChangedListener(textChangeListener);
+        mUserNameSignup.setOnFocusChangeListener(textChangeListener);
+
+        textChangeListener = new TextChangeListener(mMobileSignup, defautlTextColor, ActionRequest.REGISTER_CUSTOMER);
+        mMobileSignup.addTextChangedListener(textChangeListener);
+        mMobileSignup.setOnFocusChangeListener(textChangeListener);
+
+        textChangeListener = new TextChangeListener(mEmailSignup, defautlTextColor, ActionRequest.REGISTER_CUSTOMER);
+        mEmailSignup.addTextChangedListener(textChangeListener);
+        mEmailSignup.setOnFocusChangeListener(textChangeListener);
+
+        textChangeListener = new TextChangeListener(mPasswordSignup, defautlTextColor, ActionRequest.REGISTER_CUSTOMER);
+        mPasswordSignup.addTextChangedListener(textChangeListener);
+        mPasswordSignup.setOnFocusChangeListener(textChangeListener);
+
+        textChangeListener = new TextChangeListener(mConfirmPassword, defautlTextColor, ActionRequest.REGISTER_CUSTOMER);
+        mConfirmPassword.addTextChangedListener(textChangeListener);
+        mConfirmPassword.setOnFocusChangeListener(textChangeListener);
+
+        // Vendor signup
+        textChangeListener = new TextChangeListener(mShopName, defautlTextColor, ActionRequest.VENDOR_REGISTER);
+        mShopName.addTextChangedListener(textChangeListener);
+        mShopName.setOnFocusChangeListener(textChangeListener);
+
+        textChangeListener = new TextChangeListener(mShopAddress, defautlTextColor, ActionRequest.VENDOR_REGISTER);
+        mShopAddress.addTextChangedListener(textChangeListener);
+        mShopAddress.setOnFocusChangeListener(textChangeListener);
+
+        textChangeListener = new TextChangeListener(mEmailSignupVendor, defautlTextColor, ActionRequest.VENDOR_REGISTER);
+        mEmailSignupVendor.addTextChangedListener(textChangeListener);
+        mEmailSignupVendor.setOnFocusChangeListener(textChangeListener);
+
+        textChangeListener = new TextChangeListener(mMobileSignupVendor, defautlTextColor, ActionRequest.VENDOR_REGISTER);
+        mMobileSignupVendor.addTextChangedListener(textChangeListener);
+        mMobileSignupVendor.setOnFocusChangeListener(textChangeListener);
+
+        textChangeListener = new TextChangeListener(mPanNumber, defautlTextColor, ActionRequest.VENDOR_REGISTER);
+        mPanNumber.addTextChangedListener(textChangeListener);
+        mPanNumber.setOnFocusChangeListener(textChangeListener);
+
+        textChangeListener = new TextChangeListener(mAdharCard, defautlTextColor, ActionRequest.VENDOR_REGISTER);
+        mAdharCard.addTextChangedListener(textChangeListener);
+        mAdharCard.setOnFocusChangeListener(textChangeListener);
+
+        textChangeListener = new TextChangeListener(mPasswordSignupVendor, defautlTextColor, ActionRequest.VENDOR_REGISTER);
+        mPasswordSignupVendor.addTextChangedListener(textChangeListener);
+        mPasswordSignupVendor.setOnFocusChangeListener(textChangeListener);
+
+        textChangeListener = new TextChangeListener(mConfirmPasswordVendor, defautlTextColor, ActionRequest.VENDOR_REGISTER);
+        mConfirmPasswordVendor.addTextChangedListener(textChangeListener);
+        mConfirmPasswordVendor.setOnFocusChangeListener(textChangeListener);
+
+
         Bundle bundle = getIntent().getExtras();
         if(bundle != null) {
             boolean isFromSignout = bundle.getBoolean(Constant.IS_FROM_SIGNOUT);
@@ -110,6 +196,8 @@ public class SplashActivity extends ScrAppActivity {
         mShopAddress.setClickable(true);
         mShopAddress.setOnClickListener(view -> openAutocompleteActivity());
 
+        mainview.setOnClickListener(view -> UIutil.hideKeyboard(SplashActivity.this));
+
         loginCta.setOnClickListener(view -> {
 
             if(validation(ActionRequest.LOGIN)) {
@@ -127,8 +215,6 @@ public class SplashActivity extends ScrAppActivity {
                             sPwd = mPassword.getText().toString();
                             mAction = ActionRequest.LOGIN;
                             loginProcess(ActionRequest.LOGIN, false);
-                        } else {
-                            CommonUtils.displayToast(getContext(), getString(R.string.fill_mandatory_field));
                         }
                     } else {
                         CommonUtils.saveSharedPref(Constant.SP_FILE_LOGIN, Constant.SP_USER_TYPE, "vendor_login");
@@ -137,8 +223,6 @@ public class SplashActivity extends ScrAppActivity {
                             sPwd = mPassword.getText().toString();
                             mAction = ActionRequest.LOGIN_VENDOR;
                             loginProcess(ActionRequest.LOGIN_VENDOR, false);
-                        } else {
-                            CommonUtils.displayToast(getContext(), getString(R.string.fill_mandatory_field));
                         }
                     }
                 });
@@ -149,8 +233,6 @@ public class SplashActivity extends ScrAppActivity {
 //                }
 //            });
                 builder.show();
-            } else {
-                CommonUtils.displayToast(getContext(), getString(R.string.fill_mandatory_field));
             }
 
         });
@@ -193,8 +275,6 @@ public class SplashActivity extends ScrAppActivity {
                             mMobileSignup.getText().toString(), null, Constant.SIGNUP_REQUEST_TAG);
                     mApiClient.signUpRequest(signupRequestParam);
                 }
-            }else {
-                CommonUtils.displayToast(getContext(), getString(R.string.fill_mandatory_field));
             }
         });
 
@@ -213,8 +293,6 @@ public class SplashActivity extends ScrAppActivity {
                             mPanNumber.getText().toString(), mAdharCard.getText().toString(), null, Constant.SIGNUP_VENDOR_REQUEST_TAG);
                     mApiClient.signUpVendorRequest(signupRequestParam);
                 }
-            } else {
-                CommonUtils.displayToast(getContext(), getString(R.string.fill_mandatory_field));
             }
 
         });
@@ -241,19 +319,102 @@ public class SplashActivity extends ScrAppActivity {
 
     }
 
+    private class TextChangeListener extends TextWatcherListener {
+
+        private EditText mEdittext;
+        private String type;
+
+        public TextChangeListener(EditText mEdittext, int defaultTextColor, String type) {
+            super(mEdittext, defaultTextColor);
+            this.mEdittext = mEdittext;
+            this.type = type;
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+            super.onTextChanged(charSequence, start, before, count);
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            if(editable.length() == 0) {
+
+            }
+            verifyAllField(type);
+
+        }
+    }
+
+    private void verifyAllField(String type) {
+
+        errorMsg.setVisibility(View.GONE);
+        errorMsgCustomer.setVisibility(View.GONE);
+        errorMsgVendor.setVisibility(View.GONE);
+
+        boolean ret = true;
+
+        if(ActionRequest.LOGIN.equals(type)) {
+            ret &= UIutil.verifyString(mUserName.getText().toString());
+            ret &= UIutil.verifyString(mPassword.getText().toString());
+
+            if (ret) {
+                loginCta.setEnabled(true);
+            } else {
+                loginCta.setEnabled(false);
+            }
+        } else if(ActionRequest.REGISTER_CUSTOMER.equals(type)){
+
+            ret &= UIutil.verifyString(mUserNameSignup.getText().toString());
+            ret &= UIutil.verifyString(mMobileSignup.getText().toString());
+            ret &= UIutil.isValidEmail(mEmailSignup.getText().toString());
+            ret &= UIutil.verifyString(mPasswordSignup.getText().toString());
+            ret &= UIutil.verifyString(mConfirmPassword.getText().toString());
+
+            if(ret) {
+                signupCustomerCta.setEnabled(true);
+            } else {
+                signupCustomerCta.setEnabled(false);
+            }
+        } else if(ActionRequest.VENDOR_REGISTER.equals(type)) {
+
+            ret &= UIutil.verifyString(mShopName.getText().toString());
+            ret &= UIutil.verifyString(mShopAddress.getText().toString());
+            ret &= UIutil.verifyString(mMobileSignupVendor.getText().toString());
+            ret &= UIutil.isValidEmail(mEmailSignupVendor.getText().toString());
+            ret &= UIutil.verifyString(mPanNumber.getText().toString());
+            ret &= UIutil.verifyString(mAdharCard.getText().toString());
+            ret &= UIutil.verifyString(mPasswordSignupVendor.getText().toString());
+            ret &= UIutil.verifyString(mConfirmPasswordVendor.getText().toString());
+
+
+            if(ret) {
+                signupVendorCta.setEnabled(true);
+            } else {
+                signupVendorCta.setEnabled(false);
+            }
+        }
+
+    }
+
     private boolean validation(String action) {
 
         if(action.equalsIgnoreCase(ActionRequest.LOGIN)) {
-            if (CommonUtils.textValidation(mUserName) && CommonUtils.textValidation(mPassword)) {
-                return true;
+            if (!CommonUtils.textValidation(mUserName) && !CommonUtils.textValidation(mPassword)) {
+                mUserNameLayout.setError(getString(R.string.field_empty));
+                mPasswordLayout.setError(getString(R.string.field_empty));
+                return false;
             }
 
             if (!CommonUtils.textValidation(mUserName)) {
                 mUserName.setError(null);
+                mUserNameLayout.setError(getString(R.string.field_empty));
+                return false;
             }
 
             if (!CommonUtils.textValidation(mPassword)) {
                 mPassword.setError(null);
+                mPasswordLayout.setError(getString(R.string.field_empty));
+                return false;
             }
         } else if(action.equalsIgnoreCase(ActionRequest.REGISTER_CUSTOMER)) {
             if(CommonUtils.textValidation(mUserNameSignup) && CommonUtils.textValidation(mPasswordSignup) && CommonUtils.textValidation(mConfirmPassword)
@@ -331,7 +492,7 @@ public class SplashActivity extends ScrAppActivity {
 
         }
 
-        return false;
+        return true;
 
     }
 
@@ -351,7 +512,7 @@ public class SplashActivity extends ScrAppActivity {
 //    }
 
     /**
-     * Response of Uploaded File
+     * Response of Success case
      *
      * @param apiResponse UploadFileResponse
      */
@@ -416,6 +577,7 @@ public class SplashActivity extends ScrAppActivity {
             case Constant.SIGNIN_REQUEST_TAG:
                 dismissProgress();
                 CommonUtils.displayToast(getContext(), event.getRetrofitError().toString());
+
                 Log.e("okhttp", event.getRetrofitError().toString());
                 break;
 
@@ -450,14 +612,18 @@ public class SplashActivity extends ScrAppActivity {
         switch (event.getRequestTag()) {
             case Constant.SIGNIN_REQUEST_TAG:
                 dismissProgress();
-                CommonUtils.displayToast(getContext(), event.getResultMsgUser());
+//                CommonUtils.displayToast(getContext(), event.getResultMsgUser());
+                errorMsg.setText(event.getResultMsgUser());
+                errorMsg.setVisibility(View.VISIBLE);
                 signInLayout.setVisibility(View.VISIBLE);
                 signUpLayoutCustomer.setVisibility(View.INVISIBLE);
                 break;
 
             case Constant.SIGNUP_REQUEST_TAG:
                 dismissProgress();
-                CommonUtils.displayToast(getContext(), event.getResultMsgUser());
+//                CommonUtils.displayToast(getContext(), event.getResultMsgUser());
+                errorMsgCustomer.setText(event.getResultMsgUser());
+                errorMsgCustomer.setVisibility(View.VISIBLE);
                 signInLayout.setVisibility(View.VISIBLE);
                 signUpLayoutCustomer.setVisibility(View.INVISIBLE);
                 signUpLayoutVendor.setVisibility(View.INVISIBLE);
@@ -465,7 +631,9 @@ public class SplashActivity extends ScrAppActivity {
 
             case Constant.SIGNUP_VENDOR_REQUEST_TAG:
                 dismissProgress();
-                CommonUtils.displayToast(getContext(), event.getResultMsgUser());
+//                CommonUtils.displayToast(getContext(), event.getResultMsgUser());
+                errorMsgVendor.setText(event.getResultMsgUser());
+                errorMsgVendor.setVisibility(View.VISIBLE);
                 signInLayout.setVisibility(View.VISIBLE);
                 signUpLayoutCustomer.setVisibility(View.INVISIBLE);
                 signUpLayoutVendor.setVisibility(View.INVISIBLE);

@@ -40,6 +40,7 @@
     <string name="vendor">Vendor</string>
 
     <string name="fill_mandatory_field">Fill mandatory field(s)</string>
+    <string name="field_empty">Field is empty</string>
     <string name="password_mismatch">Password Mismatch!</string>
     <string name="error_no_internet">Check your network connection</string>
     <string name="error_server_problem">Server problem. Try later.</string>
@@ -78,6 +79,8 @@
     <string name="my_orders">My Orders</string>
     <string name="signout_menu">Signout</string>
     <string name="no_orders">No Orders</string>
+    <string name="un_password_incorrect">user name or password incorrect</string>
+    <string name="try_again_later">Please try again later</string>
 
 
 </resources>

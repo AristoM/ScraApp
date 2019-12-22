@@ -21,110 +21,266 @@
             android:layout_marginBottom="@dimen/button_text_small"
             android:gravity="center"
             android:text="@string/new_vendor_registration"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="@dimen/button_text_xsmall"/>
 
-        <com.scraapp.utility.ScraAppEdittext
-            android:id="@+id/shop_name"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:background="@drawable/et_login_bg"
-            android:hint="@string/user_name"
-            android:padding="@dimen/padding_medium"
-            android:singleLine="true"
-            android:text="" />
+            android:layout_height="wrap_content"
+            android:background="@color/white">
 
-        <com.scraapp.utility.ScraAppEdittext
-            android:id="@+id/shop_addresss"
-            android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:layout_marginTop="@dimen/padding_small"
-            android:background="@drawable/et_login_bg"
-            android:hint="@string/address"
-            android:padding="@dimen/padding_medium"
-            android:singleLine="true"
-            android:text="" />
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/shop_name_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginTop="@dimen/dim_10">
 
-        <com.scraapp.utility.ScraAppEdittext
-            android:id="@+id/email_signup_vendor"
-            android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:layout_marginTop="@dimen/padding_small"
-            android:background="@drawable/et_login_bg"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:padding="@dimen/padding_medium"
-            android:singleLine="true"
-            android:text="" />
+                <com.scraapp.utility.ScraAppTextInputEdittext
+                    android:id="@+id/shop_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="49dp"
+                    android:hint="@string/user_name"
+                    android:padding="@dimen/padding_medium"
+                    android:singleLine="true"
+                    android:text=""
+                    android:layout_marginTop="@dimen/dim_5"/>
 
-        <com.scraapp.utility.ScraAppEdittext
-            android:id="@+id/mobile_signup_vendor"
-            android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:layout_marginTop="@dimen/padding_small"
-            android:background="@drawable/et_login_bg"
-            android:hint="@string/mobile_no"
-            android:inputType="phone"
-            android:maxLength="10"
-            android:padding="@dimen/padding_medium"
-            android:singleLine="true"
-            android:text="" />
+            </android.support.design.widget.TextInputLayout>
 
-        <com.scraapp.utility.ScraAppEdittext
-            android:id="@+id/pan_number"
-            android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:layout_marginTop="@dimen/padding_small"
-            android:background="@drawable/et_login_bg"
-            android:hint="@string/adhar_number"
-            android:inputType="text"
-            android:maxLength="10"
-            android:padding="@dimen/padding_medium"
-            android:singleLine="true"
-            android:text="" />
+        </LinearLayout>
 
-        <com.scraapp.utility.ScraAppEdittext
-            android:id="@+id/adhar_number"
-            android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:layout_marginTop="@dimen/padding_small"
-            android:background="@drawable/et_login_bg"
-            android:hint="@string/pan_number"
-            android:inputType="text"
-            android:maxLength="10"
-            android:padding="@dimen/padding_medium"
-            android:singleLine="true"
-            android:text="" />
+        <include layout="@layout/divider"/>
 
-        <com.scraapp.utility.ScraAppEdittext
-            android:id="@+id/password_signup_vendor"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:layout_marginTop="@dimen/padding_small"
-            android:background="@drawable/et_login_bg"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:padding="@dimen/padding_medium"
-            android:singleLine="true"
-            android:text="" />
+            android:layout_height="wrap_content"
+            android:background="@color/white">
 
-        <com.scraapp.utility.ScraAppEdittext
-            android:id="@+id/confirm_password_signup_vendor"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/shop_addresss_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginTop="@dimen/dim_10">
+
+                <com.scraapp.utility.ScraAppTextInputEdittext
+                    android:id="@+id/shop_addresss"
+                    android:layout_width="match_parent"
+                    android:layout_height="49dp"
+                    android:hint="@string/address"
+                    android:padding="@dimen/padding_medium"
+                    android:singleLine="true"
+                    android:text=""
+                    android:layout_marginTop="@dimen/dim_5"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <include layout="@layout/divider"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:layout_marginTop="@dimen/padding_small"
-            android:background="@drawable/et_login_bg"
-            android:hint="@string/confirm_password"
-            android:inputType="textPassword"
-            android:padding="@dimen/padding_medium"
-            android:singleLine="true"
-            android:text="" />
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/email_signup_vendor_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginTop="@dimen/dim_10">
+
+                <com.scraapp.utility.ScraAppTextInputEdittext
+                    android:id="@+id/email_signup_vendor"
+                    android:layout_width="match_parent"
+                    android:layout_height="49dp"
+                    android:hint="@string/email"
+                    android:padding="@dimen/padding_medium"
+                    android:singleLine="true"
+                    android:text=""
+                    android:inputType="textEmailAddress"
+                    android:layout_marginTop="@dimen/dim_5"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <include layout="@layout/divider"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/mobile_signup_vendor_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginTop="@dimen/dim_10">
+
+                <com.scraapp.utility.ScraAppTextInputEdittext
+                    android:id="@+id/mobile_signup_vendor"
+                    android:layout_width="match_parent"
+                    android:layout_height="49dp"
+                    android:hint="@string/mobile_no"
+                    android:padding="@dimen/padding_medium"
+                    android:singleLine="true"
+                    android:text=""
+                    android:inputType="phone"
+                    android:layout_marginTop="@dimen/dim_5"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <include layout="@layout/divider"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/pan_number_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginTop="@dimen/dim_10">
+
+                <com.scraapp.utility.ScraAppTextInputEdittext
+                    android:id="@+id/pan_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="49dp"
+                    android:hint="@string/adhar_number"
+                    android:padding="@dimen/padding_medium"
+                    android:singleLine="true"
+                    android:text=""
+                    android:inputType="text"
+                    android:layout_marginTop="@dimen/dim_5"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <include layout="@layout/divider"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/adhar_number_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginTop="@dimen/dim_10">
+
+                <com.scraapp.utility.ScraAppTextInputEdittext
+                    android:id="@+id/adhar_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="49dp"
+                    android:hint="@string/pan_number"
+                    android:padding="@dimen/padding_medium"
+                    android:singleLine="true"
+                    android:text=""
+                    android:inputType="text"
+                    android:layout_marginTop="@dimen/dim_5"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <include layout="@layout/divider"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/password_signup_vendor_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginTop="@dimen/dim_10">
+
+                <com.scraapp.utility.ScraAppTextInputEdittext
+                    android:id="@+id/password_signup_vendor"
+                    android:layout_width="match_parent"
+                    android:layout_height="49dp"
+                    android:hint="@string/password"
+                    android:padding="@dimen/padding_medium"
+                    android:singleLine="true"
+                    android:text=""
+                    android:layout_marginTop="@dimen/dim_5"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <include layout="@layout/divider"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/confirm_password_signup_vendor_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginTop="@dimen/dim_10">
+
+                <com.scraapp.utility.ScraAppTextInputEdittext
+                    android:id="@+id/confirm_password_signup_vendor"
+                    android:layout_width="match_parent"
+                    android:layout_height="49dp"
+                    android:hint="@string/confirm_password"
+                    android:padding="@dimen/padding_medium"
+                    android:singleLine="true"
+                    android:text=""
+                    android:layout_marginTop="@dimen/dim_5"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <com.scraapp.utility.ScraAppTextView
+                android:id="@+id/error_msg_vendor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dim_10"
+                android:paddingStart="@dimen/dim_10"
+                android:gravity="center"
+                android:textColor="@color/red"
+                android:text="@string/try_again_later"
+                android:visibility="gone">
+
+            </com.scraapp.utility.ScraAppTextView>
+
+        </LinearLayout>
+
+        <include layout="@layout/divider"/>
 
         <com.scraapp.utility.ScraAppButton
             android:id="@+id/signup_cta_vendor"
             android:layout_width="match_parent"
             android:layout_height="49dp"
             android:layout_marginTop="@dimen/padding_xmedium"
-            android:background="@drawable/et_login_bg"
+            android:background="@drawable/bg_login_button"
+            android:enabled="false"
             android:padding="@dimen/padding_medium"
             android:text="@string/sign_up" />
 
